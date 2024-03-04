@@ -13,6 +13,7 @@ import {
 import NumberInput from '../input/number-input';
 import type { Modulation, LayerNr } from '~/helpers/layer';
 import { mcstables } from '~/helpers/mcstables';
+import FreqRange from './freq-range';
 
 export default component$(() => {
   const selectedRange = useSignal<string>('');
@@ -45,11 +46,6 @@ export default component$(() => {
   const ulSlots2 = useSignal<number>(0);
   const dlSymbols2 = useSignal<number>(0);
   const ulSymbols2 = useSignal<number>(0);
-
-  const rangeOptions = useComputed$(() => [
-    { label: 'FR1 (< 6GHz)', value: 'fr1' },
-    { label: 'FR2 (mmWave)', value: 'fr2' },
-  ]);
 
   const duplexOptions = useComputed$(() => {
     const range = selectedRange.value;
@@ -428,12 +424,7 @@ export default component$(() => {
         Speed: {calculate.value[0]} Mbps / {calculate.value[1]} Mbps
       </h1>
       <div class="grid grid-cols-2 gap-x-5 gap-y-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
-        <SelectInput
-          label={'Frequency Range'}
-          labelClass="text-center"
-          options={rangeOptions.value}
-          selectedValue={selectedRange}
-        />
+        <FreqRange selectedValue={selectedRange} />
         <SelectInput
           label={'Duplex'}
           labelClass="text-center"
