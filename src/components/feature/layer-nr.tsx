@@ -14,6 +14,7 @@ import NumberInput from '../input/number-input';
 import type { Modulation, LayerNr } from '~/helpers/layer';
 import { mcstables } from '~/helpers/mcstables';
 import FreqRange from './freq-range';
+import Duplex from './duplex';
 
 export default component$(() => {
   const selectedRange = useSignal<string>('');
@@ -46,22 +47,6 @@ export default component$(() => {
   const ulSlots2 = useSignal<number>(0);
   const dlSymbols2 = useSignal<number>(0);
   const ulSymbols2 = useSignal<number>(0);
-
-  const duplexOptions = useComputed$(() => {
-    const range = selectedRange.value;
-    if (range == 'fr1') {
-      return [
-        { label: 'FDD', value: 'FDD' },
-        { label: 'TDD', value: 'TDD' },
-        { label: 'SDL', value: 'SDL' },
-        { label: 'SUL', value: 'SUL' },
-      ];
-    } else if (range == 'fr2') {
-      return [{ label: 'TDD', value: 'TDD' }];
-    } else {
-      return [];
-    }
-  });
 
   const scsOptions = useComputed$(() => {
     const range = selectedRange.value;
@@ -398,7 +383,7 @@ export default component$(() => {
     const layer: LayerNr = {
       range: range,
       numerology: numerology,
-      duplex: duplexOptions.value as any,
+      duplex: selectedDuplex.value as any,
       resourceBlocksDl: rbDl,
       resourceBlocksUl: rbUl,
       mimoDl: parseInt(selectedMimoDl.value),
@@ -425,10 +410,8 @@ export default component$(() => {
       </h1>
       <div class="grid grid-cols-2 gap-x-5 gap-y-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         <FreqRange selectedValue={selectedRange} />
-        <SelectInput
-          label={'Duplex'}
-          labelClass="text-center"
-          options={duplexOptions.value}
+        <Duplex
+          selectedRange={selectedRange.value as 'fr1' | 'fr2'}
           selectedValue={selectedDuplex}
           hidden={selectedRange.value == 'fr2'}
         />
