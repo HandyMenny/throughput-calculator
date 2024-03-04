@@ -3,12 +3,10 @@ import SelectInput from '../input/select-input';
 import {
   calculateOne,
   dftPrb,
-  getBwsSupported,
   getFlexibleSymbols,
   getModulation,
   getOfdmSymbolDuration,
   getPercentageFromPatterns,
-  getPrb,
 } from '~/helpers/calculator';
 import NumberInput from '../input/number-input';
 import type { Modulation, LayerNr } from '~/helpers/layer';
@@ -16,13 +14,12 @@ import { mcstables } from '~/helpers/mcstables';
 import FreqRange from './freq-range';
 import Duplex from './duplex';
 import Scs from './scs';
+import Bandwidth from './bandwidth';
 
 export default component$(() => {
   const selectedRange = useSignal<string>('');
   const selectedDuplex = useSignal<string>('');
   const selectedScs = useSignal<string>('');
-  const selectedBwDl = useSignal<string>('');
-  const selectedBwUl = useSignal<string>('');
   const selectedModDl = useSignal<string>('');
   const selectedModUl = useSignal<string>('');
   const selectedMcsTableDl = useSignal<string>('');
@@ -163,57 +160,6 @@ export default component$(() => {
     { label: 'DFT-s-OFDM', value: 'true' },
   ];
 
-  const bandwidthDlOptions = useComputed$(() => {
-    console.log('computing');
-
-    if (selectedRange.value == '') return [];
-
-    const range = selectedRange.value as 'fr1' | 'fr2';
-    const scs = parseInt(selectedScs.value);
-
-    if (isNaN(scs)) return [];
-
-    const result = getBwsSupported(range, scs);
-
-    const map = result.map((it) => {
-      return {
-        label: it + ' MHz (' + getPrb(it, scs, range, false) + ' RB) ',
-        value: it + '',
-      };
-    });
-
-    const manual = { label: 'Resource Blocks', value: 'manual' };
-    map.push(manual);
-
-    return map;
-  });
-
-  const bandwidthUlOptions = useComputed$(() => {
-    console.log('computing');
-
-    if (selectedRange.value == '') return [];
-
-    const range = selectedRange.value as 'fr1' | 'fr2';
-    const scs = parseInt(selectedScs.value);
-    const dft = selectedWaveform.value == 'true';
-
-    if (isNaN(scs)) return [];
-
-    const result = getBwsSupported(range, scs);
-
-    const map = result.map((it) => {
-      return {
-        label: it + ' MHz (' + getPrb(it, scs, range, dft) + ' RB) ',
-        value: it + '',
-      };
-    });
-
-    const manual = { label: 'Resource Blocks', value: 'manual' };
-    map.push(manual);
-
-    return map;
-  });
-
   const tddRatioModes = [
     { label: 'DL/UL percentage', value: 'percentage' },
     { label: 'Common pattern', value: 'pattern' },
@@ -243,18 +189,8 @@ export default component$(() => {
     if (selectedRange.value == '') return [0, 0];
     const range = selectedRange.value as 'fr1' | 'fr2';
     const dft = selectedWaveform.value == 'true';
-    let rbDl = 0;
-    let rbUl = 0;
-    if (selectedBwDl.value == 'manual') {
-      rbDl = selectedRbDl.value;
-    } else {
-      rbDl = getPrb(parseInt(selectedBwDl.value), numerology, range) ?? 0;
-    }
-    if (selectedBwUl.value == 'manual') {
-      rbUl = selectedRbDl.value;
-    } else {
-      rbUl = getPrb(parseInt(selectedBwUl.value), numerology, range) ?? 0;
-    }
+    const rbDl = selectedRbDl.value;
+    let rbUl = selectedRbUl.value;
     if (dft) rbUl = dftPrb(rbUl);
 
     let modDl: Modulation;
@@ -400,31 +336,20 @@ export default component$(() => {
           selectedRange={selectedRange.value as 'fr1' | 'fr2'}
           selectedValue={selectedScs}
         />
-        <SelectInput
-          label={'Downlink Bandwdith'}
-          labelClass="text-center"
-          options={bandwidthDlOptions.value}
-          selectedValue={selectedBwDl}
+        <Bandwidth
+          prefix={'Downlink'}
+          selectedRange={selectedRange.value as 'fr1' | 'fr2'}
+          selectedScs={parseInt(selectedScs.value)}
+          selectedValue={selectedRbDl}
           hidden={!showDl.value}
         />
-        <NumberInput
-          label={'Downlink RBs'}
-          labelClass="text-center"
-          selectedValue={selectedRbDl}
-          hidden={!showDl.value || selectedBwDl.value !== 'manual'}
-        />
-        <SelectInput
-          label={'Uplink Bandwdith'}
-          labelClass="text-center"
-          options={bandwidthUlOptions.value}
-          selectedValue={selectedBwUl}
-          hidden={!showUl.value}
-        />
-        <NumberInput
-          label={'Uplink RBs'}
-          labelClass="text-center"
+        <Bandwidth
+          prefix={'Uplink'}
+          selectedRange={selectedRange.value as 'fr1' | 'fr2'}
+          selectedScs={parseInt(selectedScs.value)}
           selectedValue={selectedRbUl}
-          hidden={!showUl.value || selectedBwUl.value !== 'manual'}
+          dft={selectedWaveform.value == 'true'}
+          hidden={!showUl.value}
         />
         <SelectInput
           label={'Downlink Mimo Layers'}
