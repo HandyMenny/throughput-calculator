@@ -15,6 +15,7 @@ import type { Modulation, LayerNr } from '~/helpers/layer';
 import { mcstables } from '~/helpers/mcstables';
 import FreqRange from './freq-range';
 import Duplex from './duplex';
+import Scs from './scs';
 
 export default component$(() => {
   const selectedRange = useSignal<string>('');
@@ -47,26 +48,6 @@ export default component$(() => {
   const ulSlots2 = useSignal<number>(0);
   const dlSymbols2 = useSignal<number>(0);
   const ulSymbols2 = useSignal<number>(0);
-
-  const scsOptions = useComputed$(() => {
-    const range = selectedRange.value;
-    if (range == 'fr1') {
-      return [
-        { label: '15 kHz', value: '0' },
-        { label: '30 kHz', value: '1' },
-        { label: '60 kHz', value: '2' },
-      ];
-    } else if (range == 'fr2') {
-      return [
-        { label: '60 kHz', value: '2' },
-        { label: '120 kHz', value: '3' },
-        { label: '480 kHz', value: '5' },
-        { label: '960 kHz', value: '6' },
-      ];
-    } else {
-      return [];
-    }
-  });
 
   const mimoDlOptions = [
     { label: '1', value: '1' },
@@ -415,10 +396,8 @@ export default component$(() => {
           selectedValue={selectedDuplex}
           hidden={selectedRange.value == 'fr2'}
         />
-        <SelectInput
-          label={'SCS'}
-          labelClass="text-center"
-          options={scsOptions.value}
+        <Scs
+          selectedRange={selectedRange.value as 'fr1' | 'fr2'}
           selectedValue={selectedScs}
         />
         <SelectInput
