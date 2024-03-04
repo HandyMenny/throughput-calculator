@@ -1,6 +1,6 @@
 import { component$ } from '@builder.io/qwik';
-import Layer from '../feature/layer';
+import LayerNr from '../feature/layer-nr';
 
 export default component$(() => {
-  return <Layer />;
+  return <LayerNr />;
 });
