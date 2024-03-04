@@ -1,5 +1,5 @@
 import { component$, useComputed$, useSignal } from '@builder.io/qwik';
-import SelectInput from './select-input';
+import SelectInput from '../input/select-input';
 import {
   calculateOne,
   dftPrb,
@@ -10,7 +10,7 @@ import {
   getPercentageFromPatterns,
   getPrb,
 } from '~/helpers/calculator';
-import NumberInput from './number-input';
+import NumberInput from '../input/number-input';
 import type { Modulation, LayerNr } from '~/helpers/layer';
 import { mcstables } from '~/helpers/mcstables';
 
