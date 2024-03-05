@@ -8,6 +8,14 @@ export interface FlexSymbols {
   type: 'guard' | 'dl' | 'ul';
 }
 
+export interface TDDCommonPattern {
+  periodicity: number;
+  dlSlots: number;
+  dlSymbols: number;
+  ulSlots: number;
+  ulSymbols: number;
+}
+
 export interface LayerNr {
   range: 'fr1' | 'fr2';
   numerology: number;

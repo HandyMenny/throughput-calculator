@@ -201,13 +201,13 @@ function getPercentageFromPattern(
 }
 
 export function getPercentageFromPatterns(
+  numerology: number,
   period1: number,
   slot1: number,
   symbols1: number,
-  period2: number | null,
-  slot2: number | null,
-  symbols2: number | null,
-  numerology: number,
+  period2?: number,
+  slot2?: number,
+  symbols2?: number,
 ): number {
   const percent1 = getPercentageFromPattern(
     period1,
