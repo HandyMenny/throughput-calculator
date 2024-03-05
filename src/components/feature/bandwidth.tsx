@@ -48,6 +48,8 @@ export default component$((props: Props) => {
   useTask$(({ track }) => {
     track(() => selectedBw.value);
     track(() => selectedRb.value);
+    track(() => selectedScs);
+    track(() => selectedRange);
     if (selectedValue == null) return;
 
     let rb;
