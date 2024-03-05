@@ -4,28 +4,23 @@ import {
   calculateOne,
   dftPrb,
   getFlexibleSymbols,
-  getModulation,
   getOfdmSymbolDuration,
   getPercentageFromPatterns,
 } from '~/helpers/calculator';
 import NumberInput from '../input/number-input';
 import type { Modulation, LayerNr } from '~/helpers/layer';
-import { mcstables } from '~/helpers/mcstables';
 import FreqRange from './freq-range';
 import Duplex from './duplex';
 import Scs from './scs';
 import Bandwidth from './bandwidth';
+import ModulationNr from './modulation-nr';
 
 export default component$(() => {
   const selectedRange = useSignal<string>('');
   const selectedDuplex = useSignal<string>('');
   const selectedScs = useSignal<string>('');
-  const selectedModDl = useSignal<string>('');
-  const selectedModUl = useSignal<string>('');
-  const selectedMcsTableDl = useSignal<string>('');
-  const selectedMcsTableUl = useSignal<string>('');
-  const selectedMcsIndexDl = useSignal<string>('');
-  const selectedMcsIndexUl = useSignal<string>('');
+  const selectedModDl = useSignal<Modulation>({ modOrder: 0, codeRate: 0 });
+  const selectedModUl = useSignal<Modulation>({ modOrder: 0, codeRate: 0 });
   const selectedMimoDl = useSignal<string>('');
   const selectedMimoUl = useSignal<string>('');
   const selectedWaveform = useSignal<string>('');
@@ -60,100 +55,6 @@ export default component$(() => {
     { label: '1', value: '1' },
     { label: '2', value: '2' },
   ];
-
-  const modulationDlOptions = [
-    { label: 'QPSK', value: '2' },
-    { label: '16QAM', value: '4' },
-    { label: '64QAM', value: '6' },
-    { label: '256QAM', value: '8' },
-    { label: '1024QAM', value: '10' },
-    { label: 'MCS Index', value: '-1' },
-    { label: 'Modulation Order + Code Rate', value: '-2' },
-  ];
-
-  const modulationUlOptions = useComputed$(() => {
-    if (selectedWaveform.value == 'true') {
-      return [
-        { label: 'π/2 BPSK', value: '1' },
-        { label: 'QPSK', value: '2' },
-        { label: '16QAM', value: '4' },
-        { label: '64QAM', value: '6' },
-        { label: '256QAM', value: '8' },
-        { label: 'MCS Index', value: '-1' },
-      ];
-    } else {
-      return [
-        { label: 'QPSK', value: '2' },
-        { label: '16QAM', value: '4' },
-        { label: '64QAM', value: '6' },
-        { label: '256QAM', value: '8' },
-        { label: 'MCS index', value: '-1' },
-      ];
-    }
-  });
-
-  const mcsTablesDL = [
-    { label: '64qam (5.1.3.1-1)', value: 'qam64' },
-    { label: '256qam (5.1.3.1-2)', value: 'qam256' },
-    { label: '64qam low spectral efficiency (5.1.3.1-3)', value: 'qam64LowSE' },
-    { label: '1024qam (5.1.3.1-4)', value: 'qam1024' },
-  ];
-
-  const mcsTablesUL = useComputed$(() => {
-    if (selectedWaveform.value == 'true') {
-      return [
-        { label: '64qam (6.1.4.1-1)', value: 'dftQam64' },
-        { label: '256qam (5.1.3.1-2)', value: 'qam256' },
-        {
-          label: '64qam low spectral efficiency (6.1.4.1-2)',
-          value: 'dftQam64LowSE',
-        },
-      ];
-    } else {
-      return [
-        { label: '64qam (5.1.3.1-1)', value: 'qam64' },
-        { label: '256qam (5.1.3.1-2)', value: 'qam256' },
-        {
-          label: '64qam low spectral efficiency (5.1.3.1-3)',
-          value: 'qam64LowSE',
-        },
-      ];
-    }
-  });
-
-  const mcsIndexesDl = useComputed$(() => {
-    const table = selectedMcsTableDl.value as
-      | ''
-      | 'qam64'
-      | 'qam256'
-      | 'qam64LowSE'
-      | 'dftQam64'
-      | 'dftQam64LowSE';
-    if (table == '') return [];
-
-    const mcsTable = mcstables[table];
-    const map = mcsTable.map((_, index) => {
-      return { label: index + '', value: index + '' };
-    });
-    return map;
-  });
-
-  const mcsIndexesUl = useComputed$(() => {
-    const table = selectedMcsTableUl.value as
-      | ''
-      | 'qam64'
-      | 'qam256'
-      | 'qam64LowSE'
-      | 'dftQam64'
-      | 'dftQam64LowSE';
-    if (table == '') return [];
-
-    const mcsTable = mcstables[table];
-    const map = mcsTable.map((_, index) => {
-      return { label: index + '', value: index + '' };
-    });
-    return map;
-  });
 
   const waveformOptions = [
     { label: 'CP-OFDM', value: 'false' },
@@ -193,32 +94,8 @@ export default component$(() => {
     let rbUl = selectedRbUl.value;
     if (dft) rbUl = dftPrb(rbUl);
 
-    let modDl: Modulation;
-    let modUl: Modulation;
-    if (selectedModDl.value == '-1') {
-      const mcsTable = selectedMcsTableDl.value as any;
-      modDl = getModulation(parseInt(selectedMcsIndexDl.value), mcsTable) ?? {
-        modOrder: 0,
-        codeRate: 0,
-      };
-    } else {
-      modDl = {
-        modOrder: parseInt(selectedModDl.value),
-        codeRate: 948 / 1024,
-      };
-    }
-    if (selectedModUl.value == '-1') {
-      const mcsTable = selectedMcsTableUl.value as any;
-      modUl = getModulation(parseInt(selectedMcsIndexUl.value), mcsTable) ?? {
-        modOrder: 0,
-        codeRate: 0,
-      };
-    } else {
-      modUl = {
-        modOrder: parseInt(selectedModUl.value),
-        codeRate: 948 / 1024,
-      };
-    }
+    const modDl: Modulation = selectedModDl.value;
+    const modUl: Modulation = selectedModUl.value;
 
     let dlRatio = selectedDuplex.value == 'SUL' ? 0 : 100;
     let ulRatio = selectedDuplex.value == 'SDL' ? 0 : 100;
@@ -365,47 +242,17 @@ export default component$(() => {
           selectedValue={selectedMimoUl}
           hidden={!showUl.value}
         />
-        <SelectInput
-          label={'Downlink Modulation'}
-          labelClass="text-center"
-          options={modulationDlOptions}
+        <ModulationNr
+          prefix={'Downlink'}
           selectedValue={selectedModDl}
           hidden={!showDl.value}
         />
-        <SelectInput
-          label={'Downlink MCS Table'}
-          labelClass="text-center"
-          options={mcsTablesDL}
-          selectedValue={selectedMcsTableDl}
-          hidden={!showDl.value || selectedModDl.value !== '-1'}
-        />
-        <SelectInput
-          label={'Downlink MCS Index'}
-          labelClass="text-center"
-          options={mcsIndexesDl.value}
-          selectedValue={selectedMcsIndexDl}
-          hidden={!showDl.value || selectedModDl.value !== '-1'}
-        />
-        <SelectInput
-          label={'Uplink Modulation'}
-          labelClass="text-center"
-          options={modulationUlOptions.value}
+        <ModulationNr
+          prefix={'Uplink'}
           selectedValue={selectedModUl}
+          ul={true}
+          dft={selectedWaveform.value == 'true'}
           hidden={!showUl.value}
-        />
-        <SelectInput
-          label={'Uplink MCS Table'}
-          labelClass="text-center"
-          options={mcsTablesUL.value}
-          selectedValue={selectedMcsTableUl}
-          hidden={!showUl.value || selectedModUl.value !== '-1'}
-        />
-        <SelectInput
-          label={'Uplink MCS Index'}
-          labelClass="text-center"
-          options={mcsIndexesUl.value}
-          selectedValue={selectedMcsIndexUl}
-          hidden={!showUl.value || selectedModUl.value !== '-1'}
         />
         <SelectInput
           label={'Uplink Waveform'}
