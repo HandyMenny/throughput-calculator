@@ -6,6 +6,7 @@ import TddCommonPatternNr from './tdd-common-pattern-nr';
 import type {
   FlexSymbolsType,
   TDDCommonPattern,
+  TDDRatioMode,
   TDDRatioPercent,
 } from '~/@types/layer-nr';
 
@@ -17,7 +18,7 @@ interface Props {
 
 export default component$((props: Props) => {
   const { selectedValue, selectedScs, hidden } = props;
-  const selectedTDDRatioMode = useSignal<string>('');
+  const selectedTDDRatioMode = useSignal<TDDRatioMode>('percent');
   const selectedPattern = useSignal<TDDCommonPattern>({
     periodicity: 0,
     dlSlots: 0,
@@ -37,7 +38,7 @@ export default component$((props: Props) => {
   const ulPercentage = useSignal<number>(23);
 
   const tddRatioModes = [
-    { label: 'DL/UL percentage', value: 'percentage' },
+    { label: 'DL/UL percentage', value: 'percent' },
     { label: 'Common pattern', value: 'pattern' },
     { label: 'Common pattern1 + pattern2', value: 'pattern12' },
   ];
@@ -121,13 +122,13 @@ export default component$((props: Props) => {
         label={'Slots DL %'}
         labelClass="text-center"
         selectedValue={dlPercentage}
-        hidden={hidden || selectedTDDRatioMode.value != 'percentage'}
+        hidden={hidden || selectedTDDRatioMode.value != 'percent'}
       />
       <NumberInput
         label={'Slots UL %'}
         labelClass="text-center"
         selectedValue={ulPercentage}
-        hidden={hidden || selectedTDDRatioMode.value != 'percentage'}
+        hidden={hidden || selectedTDDRatioMode.value != 'percent'}
       />
     </>
   );
