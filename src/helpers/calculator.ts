@@ -8,7 +8,7 @@ import type {
   Modulation,
   TDDCommonPattern,
   TDDRatioPercent,
-} from './layer';
+} from '~/@types/layer-nr';
 
 // TS 38.306 4.1.2
 export function nrCalculator3gpp(

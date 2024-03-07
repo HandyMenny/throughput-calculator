@@ -1,7 +1,7 @@
 import { type Signal, component$, useSignal, useTask$ } from '@builder.io/qwik';
 import SelectInput from '../input/select-input';
 import NumberInput from '../input/number-input';
-import type { TDDCommonPattern } from '~/helpers/layer';
+import type { TDDCommonPattern } from '~/@types/layer-nr';
 
 interface Props {
   selectedValue?: Signal<TDDCommonPattern>;

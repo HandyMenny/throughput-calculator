@@ -1,7 +1,7 @@
 import { component$, useComputed$, useSignal } from '@builder.io/qwik';
 import SelectInput from '../input/select-input';
 import { calculateOne, dftPrb } from '~/helpers/calculator';
-import type { Modulation, LayerNr } from '~/helpers/layer';
+import type { Modulation, LayerNr } from '~/@types/layer-nr';
 import FreqRange from './freq-range';
 import Duplex from './duplex';
 import Scs from './scs';

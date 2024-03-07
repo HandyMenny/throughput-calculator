@@ -1,9 +1,17 @@
+export type FreqRangeType = 'fr1' | 'fr2';
+export type DuplexType = 'TDD' | 'FDD' | 'SDL' | 'SUL';
+export type FlexSymbolsType = 'guard' | 'dl' | 'ul';
+export type McsTablesNR =
+  | 'qam64'
+  | 'qam256'
+  | 'qam64LowSE'
+  | 'dftQam64'
+  | 'dftQam64LowSE';
+
 export interface Modulation {
   modOrder: number;
   codeRate: number;
 }
-
-export type FlexSymbolsType = 'guard' | 'dl' | 'ul';
 
 export interface FlexSymbols {
   type: FlexSymbolsType;
@@ -26,9 +34,9 @@ export interface TDDRatioPercent {
 }
 
 export interface LayerNr {
-  range: 'fr1' | 'fr2';
+  range: FreqRangeType;
   numerology: number;
-  duplex: 'TDD' | 'FDD' | 'SDL' | 'SUL';
+  duplex: DuplexType;
   resourceBlocksDl: number;
   resourceBlocksUl: number;
   mimoDl: number;

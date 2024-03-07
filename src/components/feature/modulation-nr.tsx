@@ -7,7 +7,7 @@ import {
 } from '@builder.io/qwik';
 import SelectInput from '../input/select-input';
 import { getModulation } from '~/helpers/calculator';
-import type { Modulation } from '~/helpers/layer';
+import type { Modulation } from '~/@types/layer-nr';
 import { mcstables } from '~/helpers/db/mcstables';
 
 interface Props {

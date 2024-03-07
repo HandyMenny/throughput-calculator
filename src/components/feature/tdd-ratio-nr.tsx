@@ -3,7 +3,7 @@ import SelectInput from '../input/select-input';
 import NumberInput from '../input/number-input';
 import { getPercentageFromPatterns } from '~/helpers/calculator';
 import TddCommonPatternNr from './tdd-common-pattern-nr';
-import type { FlexSymbolsType, TDDCommonPattern } from '~/helpers/layer';
+import type { FlexSymbolsType, TDDCommonPattern } from '~/@types/layer-nr';
 
 interface Props {
   selectedScs: number;
