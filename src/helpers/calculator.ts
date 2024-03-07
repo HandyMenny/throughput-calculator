@@ -1,4 +1,6 @@
 import { mcstables } from './db/mcstables';
+import { numerologies } from './db/numerologies';
+import { rb_bw_map } from './db/rb-bw-map';
 import type {
   FlexSymbols,
   FlexSymbolsType,
@@ -7,86 +9,6 @@ import type {
   TDDCommonPattern,
   TDDRatioPercent,
 } from './layer';
-
-// TS 38.211 4.2
-const numerologies = [15, 30, 60, 120, 240, 480, 960];
-
-namespace rb_bw_mapping {
-  // TS 38.101-1 5.3
-  export const fr1 = {
-    15: {
-      5: 25,
-      10: 52,
-      15: 79,
-      20: 106,
-      25: 133,
-      30: 160,
-      35: 188,
-      40: 216,
-      45: 242,
-      50: 270,
-    },
-    30: {
-      5: 11,
-      10: 24,
-      15: 38,
-      20: 51,
-      25: 65,
-      30: 78,
-      35: 92,
-      40: 106,
-      45: 119,
-      50: 133,
-      60: 162,
-      70: 189,
-      80: 217,
-      90: 245,
-      100: 273,
-    },
-    60: {
-      10: 11,
-      15: 18,
-      20: 24,
-      25: 31,
-      30: 38,
-      35: 44,
-      40: 51,
-      45: 58,
-      50: 65,
-      60: 79,
-      70: 93,
-      80: 107,
-      90: 121,
-      100: 135,
-    },
-  };
-
-  // TS 38.101-2 5.3
-  export const fr2 = {
-    60: {
-      50: 66,
-      100: 132,
-      200: 264,
-    },
-    120: {
-      50: 32,
-      100: 66,
-      200: 132,
-      400: 264,
-    },
-    480: {
-      400: 66,
-      800: 124,
-      1600: 248,
-    },
-    960: {
-      400: 33,
-      800: 62,
-      1600: 124,
-      2000: 148,
-    },
-  };
-}
 
 // TS 38.306 4.1.2
 export function nrCalculator3gpp(
@@ -120,9 +42,7 @@ export function getOfdmSymbolDuration(numerology: number) {
 }
 
 export function getScsSupported(range: 'fr1' | 'fr2'): number[] {
-  return Object.getOwnPropertyNames(rb_bw_mapping[range]).map((x) =>
-    parseInt(x),
-  );
+  return Object.getOwnPropertyNames(rb_bw_map[range]).map((x) => parseInt(x));
 }
 
 export function getPrb(
@@ -178,10 +98,10 @@ function getScsBwMapping(range: 'fr1' | 'fr2', numerology: number) {
   let scsMapping = undefined;
   if (range == 'fr1') {
     const normalized = scs as 15 | 30 | 60;
-    scsMapping = rb_bw_mapping[range][normalized];
+    scsMapping = rb_bw_map[range][normalized];
   } else {
     const normalized = scs as 60 | 120 | 480 | 960;
-    scsMapping = rb_bw_mapping[range][normalized];
+    scsMapping = rb_bw_map[range][normalized];
   }
   return scsMapping;
 }
