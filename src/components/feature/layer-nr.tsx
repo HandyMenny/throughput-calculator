@@ -1,7 +1,12 @@
 import { component$, useComputed$, useSignal } from '@builder.io/qwik';
 import SelectInput from '../input/select-input';
 import { calculateOne, dftPrb } from '~/helpers/calculator';
-import type { Modulation, LayerNr, FreqRangeType } from '~/@types/layer-nr';
+import type {
+  Modulation,
+  LayerNr,
+  FreqRangeType,
+  TDDRatioPercent,
+} from '~/@types/layer-nr';
 import FreqRange from './freq-range';
 import Duplex from './duplex';
 import Scs from './scs';
@@ -20,7 +25,7 @@ export default component$(() => {
   const selectedWaveform = useSignal<string>('');
   const selectedRbDl = useSignal<number>(100);
   const selectedRbUl = useSignal<number>(100);
-  const tddRatio = useSignal<number[]>([100, 100]);
+  const tddRatio = useSignal<TDDRatioPercent>({ dl: 1, ul: 1, periodicity: 1 });
 
   const mimoDlOptions = [
     { label: '1', value: '1' },
@@ -57,8 +62,8 @@ export default component$(() => {
     let ulRatio = 1;
 
     if (selectedDuplex.value == 'TDD') {
-      dlRatio = tddRatio.value[0];
-      ulRatio = tddRatio.value[1];
+      dlRatio = tddRatio.value.dl;
+      ulRatio = tddRatio.value.ul;
     } else if (selectedDuplex.value == 'SUL') {
       dlRatio = 0;
     } else if (selectedDuplex.value == 'SDL') {

@@ -3,11 +3,15 @@ import SelectInput from '../input/select-input';
 import NumberInput from '../input/number-input';
 import { getPercentageFromPatterns } from '~/helpers/calculator';
 import TddCommonPatternNr from './tdd-common-pattern-nr';
-import type { FlexSymbolsType, TDDCommonPattern } from '~/@types/layer-nr';
+import type {
+  FlexSymbolsType,
+  TDDCommonPattern,
+  TDDRatioPercent,
+} from '~/@types/layer-nr';
 
 interface Props {
   selectedScs: number;
-  selectedValue?: Signal<number[]>;
+  selectedValue?: Signal<TDDRatioPercent>;
   hidden?: boolean;
 }
 
@@ -55,8 +59,11 @@ export default component$((props: Props) => {
 
     if (selectedValue == null) return;
 
-    let dlRatio = 0;
-    let ulRatio = 0;
+    let tddRatio: TDDRatioPercent = {
+      dl: 1,
+      ul: 1,
+      periodicity: 1,
+    };
 
     if (selectedTDDRatioMode.value.startsWith('pattern')) {
       const flexSymbols = selectedFlexSymbols.value;
@@ -66,23 +73,21 @@ export default component$((props: Props) => {
           ? selectedPattern2.value
           : undefined;
 
-      const dlUlRatio = getPercentageFromPatterns(
+      tddRatio = getPercentageFromPatterns(
         selectedScs,
         flexSymbols,
         pattern,
         pattern2,
       );
-      dlRatio = dlUlRatio.dl;
-      ulRatio = dlUlRatio.ul;
     } else {
-      dlRatio = dlPercentage.value / 100;
-      ulRatio = ulPercentage.value / 100;
+      tddRatio.dl = dlPercentage.value / 100;
+      tddRatio.ul = ulPercentage.value / 100;
     }
 
-    dlRatio = Math.max(0, Math.min(dlRatio, 1));
-    ulRatio = Math.max(0, Math.min(ulRatio, 1));
+    tddRatio.dl = Math.max(0, Math.min(tddRatio.dl, 1));
+    tddRatio.ul = Math.max(0, Math.min(tddRatio.ul, 1));
 
-    selectedValue.value = [dlRatio, ulRatio];
+    selectedValue.value = tddRatio;
   });
 
   return (
