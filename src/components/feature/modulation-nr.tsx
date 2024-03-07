@@ -7,7 +7,7 @@ import {
 } from '@builder.io/qwik';
 import SelectInput from '../input/select-input';
 import { getModulation } from '~/helpers/calculator';
-import type { Modulation } from '~/@types/layer-nr';
+import type { McsTablesNR, Modulation } from '~/@types/layer-nr';
 import { mcstables } from '~/helpers/db/mcstables';
 
 interface Props {
@@ -22,7 +22,7 @@ export default component$((props: Props) => {
   const { prefix, selectedValue, ul, dft, hidden } = props;
 
   const selectedMod = useSignal<string>('');
-  const selectedMcsTable = useSignal<string>('');
+  const selectedMcsTable = useSignal<McsTablesNR>('qam64');
   const selectedMcsIndex = useSignal<string>('');
 
   const modulationOptions = useComputed$(() => {
@@ -74,15 +74,7 @@ export default component$((props: Props) => {
   });
 
   const mcsIndexes = useComputed$(() => {
-    const table = selectedMcsTable.value as
-      | ''
-      | 'qam64'
-      | 'qam256'
-      | 'qam64LowSE'
-      | 'dftQam64'
-      | 'dftQam64LowSE';
-    if (table == '') return [];
-
+    const table = selectedMcsTable.value;
     const mcsTable = mcstables[table];
     const map = mcsTable.map((_, index) => {
       return { label: index + '', value: index + '' };
@@ -98,7 +90,7 @@ export default component$((props: Props) => {
 
     let mod;
     if (selectedMod.value == '-1') {
-      const mcsTable = selectedMcsTable.value as any;
+      const mcsTable = selectedMcsTable.value;
       mod = getModulation(parseInt(selectedMcsIndex.value), mcsTable);
     } else {
       mod = {

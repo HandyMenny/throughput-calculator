@@ -6,6 +6,7 @@ import type {
   FlexSymbolsType,
   FreqRangeType,
   LayerNr,
+  McsTablesNR,
   Modulation,
   TDDCommonPattern,
   TDDRatioPercent,
@@ -236,7 +237,7 @@ export function dftPrb(prb: number) {
 
 export function getModulation(
   mcsIndex: number,
-  mcsTable: 'qam64' | 'qam256' | 'qam64LowSE' | 'dftQam64' | 'dftQam64LowSE',
+  mcsTable: McsTablesNR,
 ): Modulation | null {
   const table = mcstables[mcsTable];
 
