@@ -54,8 +54,8 @@ export default component$(() => {
     const modDl: Modulation = selectedModDl.value;
     const modUl: Modulation = selectedModUl.value;
 
-    let dlRatio = 100;
-    let ulRatio = 100;
+    let dlRatio = 1;
+    let ulRatio = 1;
 
     if (selectedDuplex.value == 'TDD') {
       dlRatio = tddRatio.value[0];

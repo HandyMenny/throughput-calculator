@@ -1,13 +1,9 @@
 import { type Signal, component$, useSignal, useTask$ } from '@builder.io/qwik';
 import SelectInput from '../input/select-input';
 import NumberInput from '../input/number-input';
-import {
-  getFlexibleSymbols,
-  getOfdmSymbolDuration,
-  getPercentageFromPatterns,
-} from '~/helpers/calculator';
+import { getPercentageFromPatterns } from '~/helpers/calculator';
 import TddCommonPatternNr from './tdd-common-pattern-nr';
-import { type TDDCommonPattern } from '~/helpers/layer';
+import type { FlexSymbolsType, TDDCommonPattern } from '~/helpers/layer';
 
 interface Props {
   selectedScs: number;
@@ -32,7 +28,7 @@ export default component$((props: Props) => {
     ulSlots: 0,
     ulSymbols: 0,
   });
-  const selectedFlexSymbols = useSignal<string>('');
+  const selectedFlexSymbols = useSignal<FlexSymbolsType>('guard');
   const dlPercentage = useSignal<number>(74);
   const ulPercentage = useSignal<number>(23);
 
@@ -68,53 +64,23 @@ export default component$((props: Props) => {
       const pattern2 =
         selectedTDDRatioMode.value == 'pattern12'
           ? selectedPattern2.value
-          : null;
+          : undefined;
 
-      dlRatio =
-        getPercentageFromPatterns(
-          selectedScs,
-          pattern.periodicity,
-          pattern.dlSlots,
-          pattern.dlSymbols,
-          pattern2?.periodicity,
-          pattern2?.dlSlots,
-          pattern2?.dlSymbols,
-        ) * 100;
-      ulRatio =
-        getPercentageFromPatterns(
-          selectedScs,
-          pattern.periodicity,
-          pattern.ulSlots,
-          pattern.ulSymbols,
-          pattern2?.periodicity,
-          pattern2?.ulSlots,
-          pattern2?.ulSymbols,
-        ) * 100;
-
-      if (flexSymbols !== 'guard') {
-        const flexSymbolsCount = getFlexibleSymbols(
-          pattern.dlSymbols,
-          pattern.ulSymbols,
-          pattern2?.dlSymbols ?? 0,
-          pattern2?.ulSymbols ?? 0,
-        );
-        const symbolDuration = getOfdmSymbolDuration(selectedScs);
-        const flexDuration = flexSymbolsCount * 1000 * symbolDuration;
-        const totalDuration =
-          pattern.periodicity + (pattern2?.periodicity ?? 0);
-        if (flexSymbols == 'dl') {
-          dlRatio += (flexDuration / totalDuration) * 100;
-        } else if (flexSymbols == 'ul') {
-          ulRatio += (flexDuration / totalDuration) * 100;
-        }
-      }
+      const dlUlRatio = getPercentageFromPatterns(
+        selectedScs,
+        flexSymbols,
+        pattern,
+        pattern2,
+      );
+      dlRatio = dlUlRatio.dl;
+      ulRatio = dlUlRatio.ul;
     } else {
-      dlRatio = dlPercentage.value;
-      ulRatio = ulPercentage.value;
+      dlRatio = dlPercentage.value / 100;
+      ulRatio = ulPercentage.value / 100;
     }
 
-    dlRatio = Math.max(0, Math.min(dlRatio, 100));
-    ulRatio = Math.max(0, Math.min(ulRatio, 100));
+    dlRatio = Math.max(0, Math.min(dlRatio, 1));
+    ulRatio = Math.max(0, Math.min(ulRatio, 1));
 
     selectedValue.value = [dlRatio, ulRatio];
   });

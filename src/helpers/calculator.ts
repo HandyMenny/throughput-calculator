@@ -1,5 +1,12 @@
 import { mcstables } from './mcstables';
-import type { LayerNr, Modulation } from './layer';
+import type {
+  FlexSymbols,
+  FlexSymbolsType,
+  LayerNr,
+  Modulation,
+  TDDCommonPattern,
+  TDDRatioPercent,
+} from './layer';
 
 // TS 38.211 4.2
 const numerologies = [15, 30, 60, 120, 240, 480, 960];
@@ -180,72 +187,111 @@ function getScsBwMapping(range: 'fr1' | 'fr2', numerology: number) {
 }
 
 function getPercentageFromPattern(
-  period: number,
-  slot: number,
-  symbols: number,
   numerology: number,
-): number {
+  pattern: TDDCommonPattern,
+): TDDRatioPercent {
   // normal cyclic prefix
   const symbolsPerSlot = 14;
 
   const slotsPerSubframe = 2 ** numerology;
   // 1 slot = 1 ms
-  const totalSlots = slotsPerSubframe * period;
+  const totalSlots = slotsPerSubframe * pattern.periodicity;
   const totalSymbols = totalSlots * symbolsPerSlot;
 
-  const usedSymbols = slot * symbolsPerSlot + symbols;
+  const dlSymbols = pattern.dlSlots * symbolsPerSlot + pattern.dlSymbols;
+  const ulSymbols = pattern.ulSlots * symbolsPerSlot + pattern.ulSymbols;
 
-  return usedSymbols / totalSymbols;
+  const dlPercent = dlSymbols / totalSymbols;
+  const ulPercent = ulSymbols / totalSymbols;
+
+  return { dl: dlPercent, ul: ulPercent, periodicity: pattern.periodicity };
 }
 
 export function getPercentageFromPatterns(
   numerology: number,
-  period1: number,
-  slot1: number,
-  symbols1: number,
-  period2?: number,
-  slot2?: number,
-  symbols2?: number,
-): number {
-  const percent1 = getPercentageFromPattern(
-    period1,
-    slot1,
-    symbols1,
-    numerology,
-  );
-  if (period2 == null || slot2 == null || symbols2 == null) {
-    return percent1;
+  flexSymbolsType: FlexSymbolsType,
+  pattern1: TDDCommonPattern,
+  pattern2?: TDDCommonPattern,
+): TDDRatioPercent {
+  const percent1 = getPercentageFromPattern(numerology, pattern1);
+  let percent2;
+  if (pattern2 != undefined) {
+    percent2 = getPercentageFromPattern(numerology, pattern2);
   }
-  const percent2 = getPercentageFromPattern(
-    period2,
-    slot2,
-    symbols2,
-    numerology,
-  );
 
-  return (percent1 * period1 + percent2 * period2) / (period1 + period2);
+  const flexSymbols: FlexSymbols = {
+    type: flexSymbolsType,
+    numerology: numerology,
+    quantity: getFlexibleSymbols(pattern1, pattern2),
+  };
+
+  return mergeTDDRatioPercent(flexSymbols, percent1, percent2);
+}
+
+function mergeTDDRatioPercent(
+  flexSymbols: FlexSymbols,
+  a: TDDRatioPercent,
+  b: TDDRatioPercent | undefined,
+): TDDRatioPercent {
+  // initialize values with pattern1
+  let totalPeriodicity = a.periodicity;
+  let dlCumulative = a.dl;
+  let ulCumulative = a.ul;
+
+  // add pattern2
+  if (b != undefined) {
+    totalPeriodicity += b.periodicity;
+    dlCumulative =
+      (dlCumulative * a.periodicity + b.dl * b.periodicity) / totalPeriodicity;
+    ulCumulative =
+      (ulCumulative * a.periodicity + b.ul * b.periodicity) / totalPeriodicity;
+  }
+
+  // add flex
+  if (flexSymbols.type !== 'guard') {
+    const symbolDuration = getOfdmSymbolDuration(flexSymbols.numerology);
+    const flexDuration = flexSymbols.quantity * 1000 * symbolDuration;
+    const flexPercent = flexDuration / totalPeriodicity;
+    if (flexSymbols.type == 'dl') {
+      dlCumulative += flexPercent;
+    } else {
+      ulCumulative += flexPercent;
+    }
+  }
+
+  return { dl: dlCumulative, ul: ulCumulative, periodicity: totalPeriodicity };
 }
 
 export function getFlexibleSymbols(
-  symbols1Dl: number,
-  symbols1Ul: number,
-  symbols2Dl: number,
-  symbols2Ul: number,
+  pattern1: TDDCommonPattern,
+  pattern2: TDDCommonPattern | undefined,
 ) {
   // normal cyclic prefix
   const symbolsPerSlot = 14;
-
   let counter = 0;
-  if (symbols1Dl != 0 || symbols1Ul != 0) {
-    counter += symbolsPerSlot - symbols1Dl - symbols1Ul;
+
+  // count pattern1 dl/ul transitions
+  if (pattern1.dlSlots != 0 && pattern1.ulSlots != 0) {
+    counter += symbolsPerSlot;
   }
 
-  if (symbols2Dl != 0 || symbols2Ul != 0) {
-    counter += symbolsPerSlot - symbols2Dl - symbols2Ul;
-  }
+  // Remove non flexible symbols
+  counter -= pattern1.dlSymbols;
+  counter -= pattern1.ulSymbols;
 
-  // A TDD config can't have no dl - ul transition
-  if (counter == 0) counter = symbolsPerSlot;
+  if (pattern2 != undefined) {
+    // count pattern2 dl/ul transitions
+    if (pattern1.ulSlots == 0 && pattern2.dlSlots != 0) {
+      counter += symbolsPerSlot;
+    }
+    if (pattern2.dlSlots != 0 && pattern2.ulSlots != 0) {
+      counter += symbolsPerSlot;
+    }
+
+    // Remove pattern2 non flexible symbols
+    counter -= pattern2.dlSymbols;
+    counter -= pattern2.ulSymbols;
+  }
 
   return counter;
 }
@@ -308,6 +354,6 @@ export function calculateOne(layer: LayerNr, direction: 'dl' | 'ul'): number {
       prb,
       overhead,
     ) *
-    (percentage / 100)
+    percentage
   );
 }

@@ -3,9 +3,12 @@ export interface Modulation {
   codeRate: number;
 }
 
+export type FlexSymbolsType = 'guard' | 'dl' | 'ul';
+
 export interface FlexSymbols {
+  type: FlexSymbolsType;
   quantity: number;
-  type: 'guard' | 'dl' | 'ul';
+  numerology: number;
 }
 
 export interface TDDCommonPattern {
@@ -14,6 +17,12 @@ export interface TDDCommonPattern {
   dlSymbols: number;
   ulSlots: number;
   ulSymbols: number;
+}
+
+export interface TDDRatioPercent {
+  dl: number;
+  ul: number;
+  periodicity: number;
 }
 
 export interface LayerNr {
