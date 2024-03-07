@@ -1,10 +1,10 @@
 import { type Signal, component$, useComputed$ } from '@builder.io/qwik';
 import SelectInput from '../input/select-input';
-import type { FreqRangeType } from '~/@types/layer-nr';
+import type { DuplexType, FreqRangeType } from '~/@types/layer-nr';
 
 interface Props {
   selectedRange: FreqRangeType;
-  selectedValue?: Signal<string>;
+  selectedValue?: Signal<DuplexType>;
   hidden?: boolean;
 }
 

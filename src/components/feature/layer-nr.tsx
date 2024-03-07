@@ -6,17 +6,18 @@ import type {
   LayerNr,
   FreqRangeType,
   TDDRatioPercent,
+  DuplexType,
 } from '~/@types/layer-nr';
 import FreqRange from './freq-range';
-import Duplex from './duplex';
 import Scs from './scs';
 import Bandwidth from './bandwidth';
 import ModulationNr from './modulation-nr';
 import TddRatioNr from './tdd-ratio-nr';
+import Duplex from './duplex';
 
 export default component$(() => {
   const selectedRange = useSignal<FreqRangeType>('fr1');
-  const selectedDuplex = useSignal<string>('');
+  const selectedDuplex = useSignal<DuplexType>('FDD');
   const selectedScs = useSignal<string>('');
   const selectedModDl = useSignal<Modulation>({ modOrder: 0, codeRate: 0 });
   const selectedModUl = useSignal<Modulation>({ modOrder: 0, codeRate: 0 });
@@ -73,7 +74,7 @@ export default component$(() => {
     const layer: LayerNr = {
       range: range,
       numerology: numerology,
-      duplex: selectedDuplex.value as any,
+      duplex: selectedDuplex.value,
       resourceBlocksDl: rbDl,
       resourceBlocksUl: rbUl,
       mimoDl: parseInt(selectedMimoDl.value),
