@@ -8,7 +8,7 @@ import {
 import SelectInput from '../input/select-input';
 import { getModulation } from '~/helpers/calculator';
 import type { Modulation } from '~/helpers/layer';
-import { mcstables } from '~/helpers/mcstables';
+import { mcstables } from '~/helpers/db/mcstables';
 
 interface Props {
   selectedValue?: Signal<Modulation>;

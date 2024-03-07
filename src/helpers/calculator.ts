@@ -1,4 +1,4 @@
-import { mcstables } from './mcstables';
+import { mcstables } from './db/mcstables';
 import type {
   FlexSymbols,
   FlexSymbolsType,
@@ -353,7 +353,6 @@ export function calculateOne(layer: LayerNr, direction: 'dl' | 'ul'): number {
       ofdmSymbolDuration,
       prb,
       overhead,
-    ) *
-    percentage
+    ) * percentage
   );
 }

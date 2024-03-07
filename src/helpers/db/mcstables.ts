@@ -1,4 +1,4 @@
-import type { Modulation } from './layer';
+import type { Modulation } from '../layer';
 
 export namespace mcstables {
   // TS 38.214 Table 5.1.3.1-1
