@@ -18,7 +18,8 @@ import Duplex from './duplex';
 export default component$(() => {
   const selectedRange = useSignal<FreqRangeType>('fr1');
   const selectedDuplex = useSignal<DuplexType>('FDD');
-  const selectedScs = useSignal<string>('');
+  // 0 = 15, 1 = 30 etc...
+  const selectedNumerology = useSignal<string>('0');
   const selectedModDl = useSignal<Modulation>({ modOrder: 0, codeRate: 0 });
   const selectedModUl = useSignal<Modulation>({ modOrder: 0, codeRate: 0 });
   const selectedMimoDl = useSignal<string>('');
@@ -49,7 +50,7 @@ export default component$(() => {
   ];
 
   const calculate = useComputed$(() => {
-    const numerology = parseInt(selectedScs.value);
+    const numerology = parseInt(selectedNumerology.value);
     const range = selectedRange.value;
     const dft = selectedWaveform.value == 'true';
     const rbDl = selectedRbDl.value;
@@ -106,18 +107,21 @@ export default component$(() => {
           selectedValue={selectedDuplex}
           hidden={selectedRange.value == 'fr2'}
         />
-        <Scs selectedRange={selectedRange.value} selectedValue={selectedScs} />
+        <Scs
+          selectedRange={selectedRange.value}
+          selectedValue={selectedNumerology}
+        />
         <Bandwidth
           prefix={'Downlink'}
           selectedRange={selectedRange.value}
-          selectedScs={parseInt(selectedScs.value)}
+          selectedScs={parseInt(selectedNumerology.value)}
           selectedValue={selectedRbDl}
           hidden={!showDl.value}
         />
         <Bandwidth
           prefix={'Uplink'}
           selectedRange={selectedRange.value}
-          selectedScs={parseInt(selectedScs.value)}
+          selectedScs={parseInt(selectedNumerology.value)}
           selectedValue={selectedRbUl}
           dft={selectedWaveform.value == 'true'}
           hidden={!showUl.value}
@@ -156,7 +160,7 @@ export default component$(() => {
           hidden={!showUl.value}
         />
         <TddRatioNr
-          selectedScs={parseInt(selectedScs.value)}
+          selectedScs={parseInt(selectedNumerology.value)}
           selectedValue={tddRatio}
           hidden={!showTDD.value}
         />

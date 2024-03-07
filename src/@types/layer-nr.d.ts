@@ -36,6 +36,7 @@ export interface TDDRatioPercent {
 
 export interface LayerNr {
   range: FreqRangeType;
+  // 0 = 15, 1 = 30 etc...
   numerology: number;
   duplex: DuplexType;
   resourceBlocksDl: number;
