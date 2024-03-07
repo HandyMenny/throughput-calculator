@@ -4,6 +4,7 @@ import { rb_bw_map } from './db/rb-bw-map';
 import type {
   FlexSymbols,
   FlexSymbolsType,
+  FreqRangeType,
   LayerNr,
   Modulation,
   TDDCommonPattern,
@@ -28,7 +29,7 @@ export function nrCalculator3gpp(
   return layers * ratePerSybmbol * symbols * overheadScaling;
 }
 
-export function getOverhead(range: 'fr1' | 'fr2', direction: 'dl' | 'ul') {
+export function getOverhead(range: FreqRangeType, direction: 'dl' | 'ul') {
   const db = {
     fr1: { dl: 0.14, ul: 0.08 },
     fr2: { dl: 0.18, ul: 0.1 },
@@ -41,14 +42,14 @@ export function getOfdmSymbolDuration(numerology: number) {
   return 0.001 / (14 * 2 ** numerology);
 }
 
-export function getScsSupported(range: 'fr1' | 'fr2'): number[] {
+export function getScsSupported(range: FreqRangeType): number[] {
   return Object.getOwnPropertyNames(rb_bw_map[range]).map((x) => parseInt(x));
 }
 
 export function getPrb(
   bw: number,
   numerology: number,
-  range: 'fr1' | 'fr2',
+  range: FreqRangeType,
   dft?: boolean,
 ): number | null {
   const scsMapping = getScsBwMapping(range, numerology);
@@ -61,7 +62,7 @@ export function getPrb(
 }
 
 export function getBwsSupported(
-  range: 'fr1' | 'fr2',
+  range: FreqRangeType,
   numerology: number,
 ): number[] {
   const scsMapping = getScsBwMapping(range, numerology);
@@ -74,7 +75,7 @@ function getProperty(object: any, property: any): any {
   return object[property];
 }
 
-function getScsOrNull(range: 'fr1' | 'fr2', numerology: number): number | null {
+function getScsOrNull(range: FreqRangeType, numerology: number): number | null {
   if (range == 'fr1') {
     const scs = numerologies[numerology];
 
@@ -92,7 +93,7 @@ function getScsOrNull(range: 'fr1' | 'fr2', numerology: number): number | null {
   }
 }
 
-function getScsBwMapping(range: 'fr1' | 'fr2', numerology: number) {
+function getScsBwMapping(range: FreqRangeType, numerology: number) {
   const scs = getScsOrNull(range, numerology);
   if (scs == null) return null;
   let scsMapping = undefined;

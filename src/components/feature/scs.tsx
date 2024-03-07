@@ -1,8 +1,9 @@
 import { type Signal, component$, useComputed$ } from '@builder.io/qwik';
 import SelectInput from '../input/select-input';
+import type { FreqRangeType } from '~/@types/layer-nr';
 
 interface Props {
-  selectedRange: 'fr1' | 'fr2' | 'lte';
+  selectedRange: FreqRangeType;
   selectedValue?: Signal<string>;
   hidden?: boolean;
 }
@@ -16,15 +17,13 @@ export default component$(({ selectedValue, selectedRange, hidden }: Props) => {
         { label: '30 kHz', value: '1' },
         { label: '60 kHz', value: '2' },
       ];
-    } else if (range == 'fr2') {
+    } else {
       return [
         { label: '60 kHz', value: '2' },
         { label: '120 kHz', value: '3' },
         { label: '480 kHz', value: '5' },
         { label: '960 kHz', value: '6' },
       ];
-    } else {
-      return [{ label: '15 kHz', value: '0' }];
     }
   });
 

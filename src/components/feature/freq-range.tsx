@@ -1,8 +1,9 @@
 import { type Signal, component$ } from '@builder.io/qwik';
 import SelectInput from '../input/select-input';
+import type { FreqRangeType } from '~/@types/layer-nr';
 
 interface Props {
-  selectedValue?: Signal<string>;
+  selectedValue?: Signal<FreqRangeType>;
 }
 
 export default component$(({ selectedValue }: Props) => {

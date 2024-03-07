@@ -8,9 +8,10 @@ import {
 import SelectInput from '../input/select-input';
 import NumberInput from '../input/number-input';
 import { getBwsSupported, getPrb } from '~/helpers/calculator';
+import type { FreqRangeType } from '~/@types/layer-nr';
 
 interface Props {
-  selectedRange: 'fr1' | 'fr2';
+  selectedRange: FreqRangeType;
   selectedScs: number;
   selectedValue?: Signal<number>;
   prefix?: string;
@@ -25,7 +26,7 @@ export default component$((props: Props) => {
   const selectedRb = useSignal<number>(100);
 
   const bandwidthOptions = useComputed$(() => {
-    const range = selectedRange as 'fr1' | 'fr2';
+    const range = selectedRange;
     const scs = selectedScs;
 
     if (isNaN(scs)) return [];

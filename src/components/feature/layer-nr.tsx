@@ -1,7 +1,7 @@
 import { component$, useComputed$, useSignal } from '@builder.io/qwik';
 import SelectInput from '../input/select-input';
 import { calculateOne, dftPrb } from '~/helpers/calculator';
-import type { Modulation, LayerNr } from '~/@types/layer-nr';
+import type { Modulation, LayerNr, FreqRangeType } from '~/@types/layer-nr';
 import FreqRange from './freq-range';
 import Duplex from './duplex';
 import Scs from './scs';
@@ -10,7 +10,7 @@ import ModulationNr from './modulation-nr';
 import TddRatioNr from './tdd-ratio-nr';
 
 export default component$(() => {
-  const selectedRange = useSignal<string>('');
+  const selectedRange = useSignal<FreqRangeType>('fr1');
   const selectedDuplex = useSignal<string>('');
   const selectedScs = useSignal<string>('');
   const selectedModDl = useSignal<Modulation>({ modOrder: 0, codeRate: 0 });
@@ -44,8 +44,7 @@ export default component$(() => {
 
   const calculate = useComputed$(() => {
     const numerology = parseInt(selectedScs.value);
-    if (selectedRange.value == '') return [0, 0];
-    const range = selectedRange.value as 'fr1' | 'fr2';
+    const range = selectedRange.value;
     const dft = selectedWaveform.value == 'true';
     const rbDl = selectedRbDl.value;
     let rbUl = selectedRbUl.value;
@@ -97,24 +96,21 @@ export default component$(() => {
       <div class="grid grid-cols-2 gap-x-5 gap-y-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         <FreqRange selectedValue={selectedRange} />
         <Duplex
-          selectedRange={selectedRange.value as 'fr1' | 'fr2'}
+          selectedRange={selectedRange.value}
           selectedValue={selectedDuplex}
           hidden={selectedRange.value == 'fr2'}
         />
-        <Scs
-          selectedRange={selectedRange.value as 'fr1' | 'fr2'}
-          selectedValue={selectedScs}
-        />
+        <Scs selectedRange={selectedRange.value} selectedValue={selectedScs} />
         <Bandwidth
           prefix={'Downlink'}
-          selectedRange={selectedRange.value as 'fr1' | 'fr2'}
+          selectedRange={selectedRange.value}
           selectedScs={parseInt(selectedScs.value)}
           selectedValue={selectedRbDl}
           hidden={!showDl.value}
         />
         <Bandwidth
           prefix={'Uplink'}
-          selectedRange={selectedRange.value as 'fr1' | 'fr2'}
+          selectedRange={selectedRange.value}
           selectedScs={parseInt(selectedScs.value)}
           selectedValue={selectedRbUl}
           dft={selectedWaveform.value == 'true'}
