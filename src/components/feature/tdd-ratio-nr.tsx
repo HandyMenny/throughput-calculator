@@ -98,19 +98,13 @@ export default component$((props: Props) => {
           pattern2?.dlSymbols ?? 0,
           pattern2?.ulSymbols ?? 0,
         );
-        console.log('flex count' + flexSymbolsCount);
         const symbolDuration = getOfdmSymbolDuration(selectedScs);
         const flexDuration = flexSymbolsCount * 1000 * symbolDuration;
-        console.log('flexduration ' + flexDuration);
         const totalDuration =
           pattern.periodicity + (pattern2?.periodicity ?? 0);
         if (flexSymbols == 'dl') {
-          console.log('flex dl');
-          console.log('prev dl ratio: ' + dlRatio);
           dlRatio += (flexDuration / totalDuration) * 100;
-          console.log('new dl ratio: ' + dlRatio);
         } else if (flexSymbols == 'ul') {
-          console.log('flex ul');
           ulRatio += (flexDuration / totalDuration) * 100;
         }
       }
@@ -135,12 +129,12 @@ export default component$((props: Props) => {
         hidden={hidden}
       />
       <TddCommonPatternNr
-        suffix=''
+        suffix=""
         selectedValue={selectedPattern}
         hidden={hidden || !selectedTDDRatioMode.value.startsWith('pattern')}
       />
       <TddCommonPatternNr
-        suffix='2'
+        suffix="2"
         selectedValue={selectedPattern2}
         hidden={hidden || selectedTDDRatioMode.value !== 'pattern12'}
       />

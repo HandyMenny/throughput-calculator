@@ -96,8 +96,6 @@ export function nrCalculator3gpp(
   const ratePerSybmbol = modOrder * codeRate * scalingFactor;
   const overheadScaling = 1 - overhead;
 
-  console.log(ofdmSymbolDuration);
-  console.log(symbols + ' ' + ratePerSybmbol + ' ' + overheadScaling);
   return layers * ratePerSybmbol * symbols * overheadScaling;
 }
 
@@ -224,8 +222,6 @@ export function getPercentageFromPatterns(
     symbols2,
     numerology,
   );
-  console.log('pattern1: ' + percent1);
-  console.log('pattern2: ' + percent2);
 
   return (percent1 * period1 + percent2 * period2) / (period1 + period2);
 }
