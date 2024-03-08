@@ -58,8 +58,15 @@ export default component$((props: Props) => {
         min={min}
         onInput$={(_, currentTarget) => {
           if (selectedValue == undefined) return;
-          const value = parseFloat(currentTarget.value);
-          if (!isNaN(value)) selectedValue.value = value;
+          const str = currentTarget.value;
+          const value = parseFloat(str);
+          if (
+            !isNaN(value) &&
+            str.trim().replaceAll(',', '.') ==
+              value.toString().replaceAll(',', '.')
+          ) {
+            selectedValue.value = value;
+          }
         }}
         ref={outputRef}
       />
