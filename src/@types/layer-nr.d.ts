@@ -49,3 +49,8 @@ export interface LayerNr {
   ulPercentage: number;
   ulTransformPrecoding: boolean;
 }
+
+export interface Throughput {
+  dl: number;
+  ul: number;
+}

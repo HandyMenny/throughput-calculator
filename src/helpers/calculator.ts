@@ -248,13 +248,6 @@ export function getModulation(
   return table[mcsIndex];
 }
 
-export function calculateAll(
-  layers: LayerNr[],
-  direction: 'dl' | 'ul',
-): number {
-  return layers.reduce((acc, curr) => acc + calculateOne(curr, direction), 0);
-}
-
 export function calculateOne(layer: LayerNr, direction: 'dl' | 'ul'): number {
   const layers = direction == 'dl' ? layer.mimoDl : layer.mimoUl;
   const mod = direction == 'dl' ? layer.modDl : layer.modUl;

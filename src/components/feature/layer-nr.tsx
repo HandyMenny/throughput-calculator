@@ -1,4 +1,9 @@
-import { component$, useComputed$, useSignal } from '@builder.io/qwik';
+import {
+  component$,
+  useComputed$,
+  useSignal,
+  useTask$,
+} from '@builder.io/qwik';
 import SelectInput from '../input/select-input';
 import { calculateOne, dftPrb } from '~/helpers/calculator';
 import type {
@@ -7,6 +12,7 @@ import type {
   FreqRangeType,
   TDDRatioPercent,
   DuplexType,
+  Throughput,
 } from '~/@types/layer-nr';
 import FreqRange from './freq-range';
 import Scs from './scs';
@@ -15,7 +21,11 @@ import ModulationNr from './modulation-nr';
 import TddRatioNr from './tdd-ratio-nr';
 import Duplex from './duplex';
 
-export default component$(() => {
+interface Props {
+  speed: Throughput;
+}
+
+export default component$(({ speed }: Props) => {
   const selectedRange = useSignal<FreqRangeType>('fr1');
   const selectedDuplex = useSignal<DuplexType>('FDD');
   // 0 = 15, 1 = 30 etc...
@@ -49,7 +59,19 @@ export default component$(() => {
     { label: 'DFT-s-OFDM', value: 'true' },
   ];
 
-  const calculate = useComputed$(() => {
+  useTask$(({ track }) => {
+    track(() => selectedRange.value);
+    track(() => selectedDuplex.value);
+    track(() => selectedNumerology.value);
+    track(() => selectedModDl.value);
+    track(() => selectedModUl.value);
+    track(() => selectedMimoDl.value);
+    track(() => selectedMimoUl.value);
+    track(() => selectedWaveform.value);
+    track(() => selectedRbDl.value);
+    track(() => selectedRbUl.value);
+    track(() => tddRatio.value);
+
     const numerology = parseInt(selectedNumerology.value);
     const range = selectedRange.value;
     const dft = selectedWaveform.value == 'true';
@@ -87,9 +109,8 @@ export default component$(() => {
       ulTransformPrecoding: dft,
     };
 
-    const dl = Math.floor(calculateOne(layer, 'dl') / 10000) / 100;
-    const ul = Math.floor(calculateOne(layer, 'ul') / 10000) / 100;
-    return [dl, ul];
+    speed.dl = calculateOne(layer, 'dl');
+    speed.ul = calculateOne(layer, 'ul');
   });
 
   const showDl = useComputed$(() => selectedDuplex.value !== 'SUL');
@@ -98,7 +119,8 @@ export default component$(() => {
   return (
     <div class="p-4">
       <h1 class="text-center text-xl">
-        Speed: {calculate.value[0]} Mbps / {calculate.value[1]} Mbps
+        Throughput: {Math.floor(speed.dl / 10000) / 100} Mbps /{' '}
+        {Math.floor(speed.ul / 10000) / 100} Mbps
       </h1>
       <div class="grid grid-cols-2 gap-x-5 gap-y-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         <FreqRange selectedValue={selectedRange} />
