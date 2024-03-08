@@ -20,6 +20,7 @@ import Bandwidth from './bandwidth';
 import ModulationNr from './modulation-nr';
 import TddRatioNr from './tdd-ratio-nr';
 import Duplex from './duplex';
+import Aggregate from './aggregate';
 
 interface Props {
   speed: Throughput;
@@ -37,7 +38,12 @@ export default component$(({ speed }: Props) => {
   const selectedWaveform = useSignal<string>('');
   const selectedRbDl = useSignal<number>(100);
   const selectedRbUl = useSignal<number>(100);
-  const tddRatio = useSignal<TDDRatioPercent>({ dl: 1, ul: 1, periodicity: 1 });
+  const tddRatio = useSignal<TDDRatioPercent>({
+    dl: 0.74,
+    ul: 0.23,
+    periodicity: 1,
+  });
+  const selectedAggregate = useSignal<string>('dl-ul');
 
   const mimoDlOptions = [
     { label: '1', value: '1' },
@@ -70,6 +76,7 @@ export default component$(({ speed }: Props) => {
     track(() => selectedWaveform.value);
     track(() => selectedRbDl.value);
     track(() => selectedRbUl.value);
+    track(() => selectedAggregate.value);
     track(() => tddRatio.value);
 
     const numerology = parseInt(selectedNumerology.value);
@@ -88,9 +95,19 @@ export default component$(({ speed }: Props) => {
     if (selectedDuplex.value == 'TDD') {
       dlRatio = tddRatio.value.dl;
       ulRatio = tddRatio.value.ul;
-    } else if (selectedDuplex.value == 'SUL') {
+    }
+
+    if (
+      selectedDuplex.value == 'SUL' ||
+      !selectedAggregate.value.includes('dl')
+    ) {
       dlRatio = 0;
-    } else if (selectedDuplex.value == 'SDL') {
+    }
+
+    if (
+      selectedDuplex.value == 'SDL' ||
+      !selectedAggregate.value.includes('ul')
+    ) {
       ulRatio = 0;
     }
 
@@ -185,6 +202,10 @@ export default component$(({ speed }: Props) => {
           selectedScs={parseInt(selectedNumerology.value)}
           selectedValue={tddRatio}
           hidden={!showTDD.value}
+        />
+        <Aggregate
+          selectedDuplex={selectedDuplex.value}
+          selectedValue={selectedAggregate}
         />
       </div>
     </div>
