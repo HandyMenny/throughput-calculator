@@ -57,8 +57,9 @@ export default component$((props: Props) => {
         disabled={disabled}
         min={min}
         onInput$={(_, currentTarget) => {
-          if (selectedValue != undefined)
-            selectedValue.value = parseFloat(currentTarget.value);
+          if (selectedValue == undefined) return;
+          const value = parseFloat(currentTarget.value);
+          if (!isNaN(value)) selectedValue.value = value;
         }}
         ref={outputRef}
       />
