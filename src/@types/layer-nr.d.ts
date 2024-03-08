@@ -54,3 +54,13 @@ export interface Throughput {
   dl: number;
   ul: number;
 }
+
+export interface UlTxSwitchPair {
+  id: number;
+  on: boolean;
+  mimo: number;
+  // %
+  airtime: number;
+  // bps
+  throughput: number;
+}

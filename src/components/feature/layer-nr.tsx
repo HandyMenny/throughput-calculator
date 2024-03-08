@@ -5,7 +5,7 @@ import {
   useTask$,
 } from '@builder.io/qwik';
 import SelectInput from '../input/select-input';
-import { calculateOne, dftPrb } from '~/helpers/calculator';
+import { bpsToMbps, calculateOne, dftPrb } from '~/helpers/calculator';
 import type {
   Modulation,
   LayerNr,
@@ -13,6 +13,7 @@ import type {
   TDDRatioPercent,
   DuplexType,
   Throughput,
+  UlTxSwitchPair,
 } from '~/@types/layer-nr';
 import FreqRange from './freq-range';
 import Scs from './scs';
@@ -24,9 +25,11 @@ import Aggregate from './aggregate';
 
 interface Props {
   speed: Throughput;
+  ulTxSwitchPair: UlTxSwitchPair;
+  txReduction: number;
 }
 
-export default component$(({ speed }: Props) => {
+export default component$(({ speed, ulTxSwitchPair, txReduction }: Props) => {
   const selectedRange = useSignal<FreqRangeType>('fr1');
   const selectedDuplex = useSignal<DuplexType>('FDD');
   // 0 = 15, 1 = 30 etc...
@@ -128,6 +131,13 @@ export default component$(({ speed }: Props) => {
 
     speed.dl = calculateOne(layer, 'dl');
     speed.ul = calculateOne(layer, 'ul');
+
+    ulTxSwitchPair.on = selectedAggregate.value.includes('ul-tx-switch');
+    if (ulTxSwitchPair.on) {
+      ulTxSwitchPair.airtime = layer.ulPercentage;
+      ulTxSwitchPair.throughput = speed.ul;
+      ulTxSwitchPair.mimo = layer.mimoUl;
+    }
   });
 
   const showDl = useComputed$(() => selectedDuplex.value !== 'SUL');
@@ -136,8 +146,8 @@ export default component$(({ speed }: Props) => {
   return (
     <div class="p-4">
       <h1 class="text-center text-xl">
-        Throughput: {Math.floor(speed.dl / 10000) / 100} Mbps /{' '}
-        {Math.floor(speed.ul / 10000) / 100} Mbps
+        Throughput: {bpsToMbps(speed.dl)} Mbps / {bpsToMbps(speed.ul)}{' '}
+        {txReduction > 0 && `(${bpsToMbps(speed.ul - txReduction)})`} Mbps
       </h1>
       <div class="grid grid-cols-2 gap-x-5 gap-y-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         <FreqRange selectedValue={selectedRange} />

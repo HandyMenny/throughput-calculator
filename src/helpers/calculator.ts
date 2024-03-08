@@ -10,6 +10,7 @@ import type {
   Modulation,
   TDDCommonPattern,
   TDDRatioPercent,
+  UlTxSwitchPair,
 } from '~/@types/layer-nr';
 
 // TS 38.306 4.1.2
@@ -270,4 +271,40 @@ export function calculateOne(layer: LayerNr, direction: 'dl' | 'ul'): number {
       overhead,
     ) * percentage
   );
+}
+
+// This only supports FDD + TDD ul tx switch
+export function calculateUlTxSwitchReduction(
+  a: UlTxSwitchPair,
+  b: UlTxSwitchPair,
+): { id: number; txReduction: number } {
+  let max;
+  let min;
+  let txReduction = 0;
+
+  if (a.throughput > b.throughput) {
+    max = a;
+    min = b;
+  } else {
+    max = b;
+    min = a;
+  }
+
+  if (max.mimo == 2) {
+    // Disable min for max.airtime
+    txReduction = min.throughput * max.airtime;
+  } else if (min.mimo == 2) {
+    // Downgrade min from 2tx -> 1tx
+    txReduction = (min.throughput * max.airtime) / 2;
+  }
+  // if min.mimo = 1tx and max.mimo = 1tx don't do anything
+
+  // txReduction shall be <= min.throughput
+  txReduction = Math.min(txReduction, min.throughput);
+
+  return { id: min.id, txReduction: txReduction };
+}
+
+export function bpsToMbps(speed: number) {
+  return Math.floor(speed / 10000) / 100;
 }
