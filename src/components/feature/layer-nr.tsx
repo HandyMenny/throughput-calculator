@@ -144,7 +144,7 @@ export default component$(({ speed, ulTxSwitchPair, txReduction }: Props) => {
   const showUl = useComputed$(() => selectedDuplex.value !== 'SDL');
   const showTDD = useComputed$(() => selectedDuplex.value === 'TDD');
   return (
-    <div class="p-4">
+    <div class="border-2 border-solid border-gray-500 p-4 m-4">
       <h1 class="text-center text-xl">
         Throughput: {bpsToMbps(speed.dl)} Mbps / {bpsToMbps(speed.ul)}{' '}
         {txReduction > 0 && `(${bpsToMbps(speed.ul - txReduction)})`} Mbps
