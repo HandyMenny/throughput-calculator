@@ -58,10 +58,14 @@ export default component$(({ speed, ulTxSwitchPair, txReduction }: Props) => {
     { label: '8', value: '8' },
   ];
 
-  const mimoUlOptions = [
-    { label: '1', value: '1' },
-    { label: '2', value: '2' },
-  ];
+  const mimoUlOptions = useComputed$(() => {
+    const arr = [
+      { label: '1', value: '1' },
+      { label: '2', value: '2' },
+    ];
+    if (selectedWaveform.value == 'true') arr.pop();
+    return arr;
+  });
 
   const waveformOptions = [
     { label: 'CP-OFDM', value: 'false' },
@@ -185,7 +189,7 @@ export default component$(({ speed, ulTxSwitchPair, txReduction }: Props) => {
         <SelectInput
           label={'Uplink Mimo Layers'}
           labelClass="text-center"
-          options={mimoUlOptions}
+          options={mimoUlOptions.value}
           selectedValue={selectedMimoUl}
           hidden={!showUl.value}
         />
