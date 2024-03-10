@@ -8,7 +8,8 @@ import {
 import LayerNr from '../feature/layer-nr';
 import Button from '../input/button';
 import type { Throughput, UlTxSwitchPair } from '~/@types/layer-nr';
-import { bpsToMbps, calculateUlTxSwitchReduction } from '~/helpers/calculator';
+import { calculateUlTxSwitchReduction } from '~/helpers/calculator';
+import Throughtput from '../feature/throughtput';
 
 export default component$(() => {
   const count = useSignal(1);
@@ -69,10 +70,14 @@ export default component$(() => {
 
   return (
     <div class="p-2">
-      <h1 class="text-center text-2xl">
-        Total Throughput: {bpsToMbps(totalSpeed.value.dl)} Mbps /{' '}
-        {bpsToMbps(totalSpeed.value.ul - txReduction.value.txReduction)} Mbps
-      </h1>
+      <Throughtput
+        class="text-center text-2xl font-bold leading-9"
+        dl={totalSpeed.value.dl}
+        ul={totalSpeed.value.ul}
+        dlUlSeparator="/"
+        iconSize={22}
+        iconStroke={2.4}
+      />
       {[...Array(count.value).keys()].map((value) => (
         <div key={`nr-${value}`}>
           <LayerNr

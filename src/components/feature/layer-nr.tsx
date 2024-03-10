@@ -5,7 +5,7 @@ import {
   useTask$,
 } from '@builder.io/qwik';
 import SelectInput from '../input/select-input';
-import { bpsToMbps, calculateOne, dftPrb } from '~/helpers/calculator';
+import { calculateOne, dftPrb } from '~/helpers/calculator';
 import type {
   Modulation,
   LayerNr,
@@ -22,6 +22,7 @@ import ModulationNr from './modulation-nr';
 import TddRatioNr from './tdd-ratio-nr';
 import Duplex from './duplex';
 import Aggregate from './aggregate';
+import Throughtput from './throughtput';
 
 interface Props {
   speed: Throughput;
@@ -149,10 +150,15 @@ export default component$(({ speed, ulTxSwitchPair, txReduction }: Props) => {
   const showTDD = useComputed$(() => selectedDuplex.value === 'TDD');
   return (
     <div class="m-4 border-2 border-solid border-gray-500 p-4">
-      <h1 class="text-center text-xl">
-        Throughput: {bpsToMbps(speed.dl)} Mbps / {bpsToMbps(speed.ul)}{' '}
-        {txReduction > 0 && `(${bpsToMbps(speed.ul - txReduction)})`} Mbps
-      </h1>
+      <Throughtput
+        class="text-center text-xl font-semibold leading-8"
+        dl={speed.dl}
+        ul={speed.ul}
+        ulReduction={txReduction}
+        dlUlSeparator="/"
+        iconSize={20}
+        iconStroke={2}
+      />
       <div class="grid grid-cols-1 items-end gap-x-5 gap-y-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
         <FreqRange selectedValue={selectedRange} />
         <Duplex
