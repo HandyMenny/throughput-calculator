@@ -1,0 +1,1 @@
+import{S as t}from"./q-BuIjMnZU.js";import{E as s,K as e,M as n}from"./q-uIvALmgb.js";const c=l=>s(t,{label:"Frequency Range",labelClass:"text-center",options:[{label:"FR1 (< 6GHz)",value:"fr1"},{label:"FR2 (mmWave)",value:"fr2"}],get selectedValue(){return l.selectedValue},[e]:{label:e,labelClass:e,selectedValue:n(a=>a.selectedValue,[l])}},3,"vx_0");export{c as s_ABN5NpqRiGQ};
