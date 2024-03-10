@@ -2,6 +2,7 @@ export type FreqRangeType = 'fr1' | 'fr2';
 export type DuplexType = 'TDD' | 'FDD' | 'SDL' | 'SUL';
 export type FlexSymbolsType = 'guard' | 'dl' | 'ul';
 export type TDDRatioMode = 'percent' | 'pattern' | 'pattern12';
+export type ThroughputUnit = 'kbps' | 'Mbps' | 'Gbps';
 export type McsTablesNR =
   | 'qam64'
   | 'qam256'
@@ -63,4 +64,9 @@ export interface UlTxSwitchPair {
   airtime: number;
   // bps
   throughput: number;
+}
+
+export interface ThroughputWithUnit {
+  value: number;
+  unit: ThroughputUnit;
 }

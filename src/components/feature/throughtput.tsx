@@ -1,5 +1,5 @@
 import { component$ } from '@builder.io/qwik';
-import { bpsToMbps } from '~/helpers/calculator';
+import { autoScaleSpeed } from '~/helpers/calculator';
 import { ArrowDownCircleIcon, ArrowUpCircleIcon } from 'qwik-feather-icons';
 
 interface Props {
@@ -19,6 +19,10 @@ export default component$((props: Props) => {
 
   const ulReduction = props.ulReduction ?? 0;
 
+  const dlResult = autoScaleSpeed(dl);
+  const ulResult = autoScaleSpeed(ul);
+  const ulReductionResult = autoScaleSpeed(ul - ulReduction, ulResult.unit);
+
   return (
     <div class={props.class}>
       <ArrowDownCircleIcon
@@ -26,10 +30,10 @@ export default component$((props: Props) => {
         size={iconSize}
         strokeWidth={iconStroke}
       />
-      {bpsToMbps(dl)} Mbps
+      {dlResult.value} {dlResult.unit}
       <span class="px-1.5">{dlUlSeparator}</span>
-      {bpsToMbps(ul)}
-      {ulReduction > 0 && ` (${bpsToMbps(ul - ulReduction)})`} Mbps
+      {ulResult.value}
+      {ulReduction > 0 && ` (${ulReductionResult.value})`} {ulResult.unit}
       <ArrowUpCircleIcon
         class="box-content inline px-1.5 pb-[5px]"
         size={iconSize}

@@ -10,6 +10,8 @@ import type {
   Modulation,
   TDDCommonPattern,
   TDDRatioPercent,
+  ThroughputUnit,
+  ThroughputWithUnit,
   UlTxSwitchPair,
 } from '~/@types/layer-nr';
 
@@ -305,6 +307,31 @@ export function calculateUlTxSwitchReduction(
   return { id: min.id, txReduction: txReduction };
 }
 
-export function bpsToMbps(speed: number) {
-  return Math.floor(speed / 10000) / 100;
+export function autoScaleSpeed(
+  speed: number,
+  unit?: ThroughputUnit,
+): ThroughputWithUnit {
+  if (unit == undefined) {
+    if (speed < 1_000_000) {
+      unit = 'kbps';
+    } else if (speed < 1_000_000_000) {
+      unit = 'Mbps';
+    } else {
+      unit = 'Gbps';
+    }
+  }
+
+  switch (unit) {
+    case 'kbps':
+      speed = Math.floor(speed / 10) / 100;
+      break;
+    case 'Mbps':
+      speed = Math.floor(speed / 10000) / 100;
+      break;
+    case 'Gbps':
+      speed = Math.floor(speed / 1000000) / 1000;
+      break;
+  }
+
+  return { value: speed, unit: unit };
 }
