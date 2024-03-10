@@ -1,1 +1,0 @@
-import{a1 as o}from"./q-BGYwdPK7.js";import{P as l,O as r}from"./q-uIvALmgb.js";const c=t=>{const e=l(o);if(!e.options)return;const n=e.selectedIndexSig.value!==null?e.options[e.selectedIndexSig.value].value:t.placeholder;return r("span",{...t,children:n},{"data-value":!0},0,"2w_0")};export{c as s_n92TrcEV90g};
