@@ -148,12 +148,12 @@ export default component$(({ speed, ulTxSwitchPair, txReduction }: Props) => {
   const showUl = useComputed$(() => selectedDuplex.value !== 'SDL');
   const showTDD = useComputed$(() => selectedDuplex.value === 'TDD');
   return (
-    <div class="border-2 border-solid border-gray-500 p-4 m-4">
+    <div class="m-4 border-2 border-solid border-gray-500 p-4">
       <h1 class="text-center text-xl">
         Throughput: {bpsToMbps(speed.dl)} Mbps / {bpsToMbps(speed.ul)}{' '}
         {txReduction > 0 && `(${bpsToMbps(speed.ul - txReduction)})`} Mbps
       </h1>
-      <div class="grid grid-cols-2 gap-x-5 gap-y-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+      <div class="grid grid-cols-2 items-end gap-x-5 gap-y-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
         <FreqRange selectedValue={selectedRange} />
         <Duplex
           selectedRange={selectedRange.value}
