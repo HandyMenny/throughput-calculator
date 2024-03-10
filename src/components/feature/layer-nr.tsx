@@ -153,7 +153,7 @@ export default component$(({ speed, ulTxSwitchPair, txReduction }: Props) => {
         Throughput: {bpsToMbps(speed.dl)} Mbps / {bpsToMbps(speed.ul)}{' '}
         {txReduction > 0 && `(${bpsToMbps(speed.ul - txReduction)})`} Mbps
       </h1>
-      <div class="grid grid-cols-2 items-end gap-x-5 gap-y-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+      <div class="grid grid-cols-1 items-end gap-x-5 gap-y-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
         <FreqRange selectedValue={selectedRange} />
         <Duplex
           selectedRange={selectedRange.value}
