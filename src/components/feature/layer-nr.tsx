@@ -14,6 +14,7 @@ import type {
   DuplexType,
   Throughput,
   UlTxSwitchPair,
+  Overhead,
 } from '~/@types/layer-nr';
 import FreqRange from './freq-range';
 import Scs from './scs';
@@ -23,6 +24,7 @@ import TddRatioNr from './tdd-ratio-nr';
 import Duplex from './duplex';
 import Aggregate from './aggregate';
 import Throughtput from './throughtput';
+import OverheadNr from './overhead-nr';
 
 interface Props {
   speed: Throughput;
@@ -47,6 +49,7 @@ export default component$(({ speed, ulTxSwitchPair, txReduction }: Props) => {
     ul: 0.23,
     periodicity: 1,
   });
+  const selectedOverhead = useSignal<Overhead>({ dl: 0, ul: 0 });
   const selectedAggregate = useSignal<string>('dl-ul');
 
   const mimoDlOptions = [
@@ -86,6 +89,7 @@ export default component$(({ speed, ulTxSwitchPair, txReduction }: Props) => {
     track(() => selectedRbUl.value);
     track(() => selectedAggregate.value);
     track(() => tddRatio.value);
+    track(() => selectedOverhead.value);
 
     const numerology = parseInt(selectedNumerology.value);
     const range = selectedRange.value;
@@ -132,6 +136,8 @@ export default component$(({ speed, ulTxSwitchPair, txReduction }: Props) => {
       dlPercentage: dlRatio,
       ulPercentage: ulRatio,
       ulTransformPrecoding: dft,
+      dlOverhead: selectedOverhead.value.dl,
+      ulOverhead: selectedOverhead.value.ul,
     };
 
     speed.dl = calculateOne(layer, 'dl');
@@ -222,6 +228,10 @@ export default component$(({ speed, ulTxSwitchPair, txReduction }: Props) => {
           selectedScs={parseInt(selectedNumerology.value)}
           selectedValue={tddRatio}
           hidden={!showTDD.value}
+        />
+        <OverheadNr
+          selectedRange={selectedRange.value}
+          selectedValue={selectedOverhead}
         />
         <Aggregate
           selectedDuplex={selectedDuplex.value}

@@ -13,13 +13,22 @@ interface Props {
   disabled?: boolean;
   hidden?: boolean;
   min?: number;
+  max?: number;
   selectedValue?: Signal<number>;
   labelClass?: string;
 }
 
 export default component$((props: Props) => {
-  const { label, placeholder, selectedValue, name, disabled, hidden, min } =
-    props;
+  const {
+    label,
+    placeholder,
+    selectedValue,
+    name,
+    disabled,
+    hidden,
+    min,
+    max,
+  } = props;
   const randId = useId();
   const id = `number-input-${randId}`;
   const hiddenCssClass = hidden ? 'hidden' : '';
@@ -56,6 +65,7 @@ export default component$((props: Props) => {
         name={name}
         disabled={disabled}
         min={min}
+        max={max}
         onInput$={(_, currentTarget) => {
           if (selectedValue == undefined) return;
           const str = currentTarget.value;

@@ -49,6 +49,8 @@ export interface LayerNr {
   dlPercentage: number;
   ulPercentage: number;
   ulTransformPrecoding: boolean;
+  dlOverhead: number;
+  ulOverhead: number;
 }
 
 export interface Throughput {
@@ -69,4 +71,9 @@ export interface UlTxSwitchPair {
 export interface ThroughputWithUnit {
   value: number;
   unit: ThroughputUnit;
+}
+
+export interface Overhead {
+  dl: number;
+  ul: number;
 }

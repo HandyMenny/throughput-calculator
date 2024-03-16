@@ -257,7 +257,7 @@ export function calculateOne(layer: LayerNr, direction: 'dl' | 'ul'): number {
   const prb =
     direction == 'dl' ? layer.resourceBlocksDl : layer.resourceBlocksUl;
   const ofdmSymbolDuration = getOfdmSymbolDuration(layer.numerology);
-  const overhead = getOverhead(layer.range, direction);
+  const overhead = direction == 'dl' ? layer.dlOverhead : layer.ulOverhead;
   const scalingFactor = 1;
   const percentage =
     direction == 'dl' ? layer.dlPercentage : layer.ulPercentage;
@@ -334,4 +334,33 @@ export function autoScaleSpeed(
   }
 
   return { value: speed, unit: unit };
+}
+
+// Unquantitized TBS Overhead based on TS 38.214 5.1.3.2, 6.1.4.2
+export function unquantizedTbsOverhead(
+  overhead: number,
+  scheduledSymbols: number,
+  drmsRePerRB: number,
+) {
+  const subframesPerRB = 12;
+  const maxSymbols = 14;
+  const rePerRb = subframesPerRB * scheduledSymbols - drmsRePerRB - overhead;
+  const maxRePerRb = subframesPerRB * maxSymbols;
+
+  const percent = rePerRb / maxRePerRb;
+  const normalizedPercent = Math.max(0, Math.min(percent, 1));
+
+  return 1 - normalizedPercent;
+}
+
+// Inspired by https://www.sharetechnote.com/html/5G/5G_MCS_TBS_CodeRate.html
+export function calculateDmrsREs(
+  type: 'type1' | 'type2',
+  len: number,
+  addPos: number,
+) {
+  const rePerDmrs = type == 'type1' ? 6 : 4;
+  const totalRe = rePerDmrs * len * (1 + addPos);
+
+  return totalRe;
 }
