@@ -47,13 +47,17 @@ export function getTbsIndexFromMcs(
   mcsTable: McsTablesLTE,
   alt: number,
 ) {
-  const table = mcstables[mcsTable];
+  try {
+    const table = mcstables[mcsTable];
 
-  if (alt > 0) {
-    return (table as any).alternative[index][alt - 1] as string;
+    if (alt > 0) {
+      return (table as any).alternative[index][alt - 1] as string;
+    }
+
+    return table.standard[index];
+  } catch (_) {
+    return '0';
   }
-
-  return table.standard[index];
 }
 
 // TS 38.306 4.1.2
