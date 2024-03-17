@@ -76,6 +76,9 @@ export default component$((props: Props) => {
       });
     });
 
+    // sort by int value
+    map.sort((a, b) => parseInt(a.value) - parseInt(b.value));
+
     return map;
   });
 
