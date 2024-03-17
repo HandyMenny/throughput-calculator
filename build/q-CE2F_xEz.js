@@ -1,7 +1,0 @@
-function __vite__mapDeps(indexes) {
-  if (!__vite__mapDeps.viteFileDeps) {
-    __vite__mapDeps.viteFileDeps = []
-  }
-  return indexes.map((i) => __vite__mapDeps.viteFileDeps[i])
-}
-import{r as u,t as d,v as _,w as h,x as R,y as v,z as P,A as y}from"./q-D9AzQSp1.js";import{$ as g,x,l as z,T as b,E as i,q as w,_ as F,U as S,K as l,w as U}from"./q-uIvALmgb.js";const E=({track:o,cleanup:s})=>{const[r,e]=g(),a=o(()=>{var n;return(n=e.anchorRef)==null?void 0:n.value}),t=o(()=>r.value);if(!t||!a)return;t.hidden=!1;const c=u(a,t,async()=>{const n=[d(e.gutter),_({strategy:e.hide}),(e.flip??!0)&&h(),e.shift&&R(),(e.autoPlacement??!1)&&v()];await P(a,t,{placement:e.placement??"bottom",middleware:n}).then(p=>{const{x:f,y:m}=p;a.offsetParent===null?t.hidden=!0:Object.assign(t.style,{left:`${f}px`,top:`${m}px`,transform:e.transform})})},{ancestorScroll:e.ancestorScroll??!0,ancestorResize:e.ancestorResize??!0,elementResize:e.elementResize??!0,animationFrame:e.animationFrame??!1});s(c)},M=o=>{const s=x(o,["anchorRef","gutter","flip","placement","shift","hide","autoPlacement","ancestorScroll","ancestorResize","elementResize","animationFrame","transform"]),r=z(),e=s.popoverRef||r;return b(w(()=>F(()=>Promise.resolve().then(()=>O),void 0),"s_4cg00CVX0xM",[e,o])),i(y,{hidden:!0,...s,children:i(S,null,3,"Up_0"),ref:e,[l]:{hidden:l}},0,"Up_1")},O=Object.freeze(Object.defineProperty({__proto__:null,_hW:U,s_4cg00CVX0xM:E,s_R2yn00u69dM:M},Symbol.toStringTag,{value:"Module"}));export{U as _hW,E as s_4cg00CVX0xM,M as s_R2yn00u69dM};
