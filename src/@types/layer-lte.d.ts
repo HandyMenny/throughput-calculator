@@ -1,4 +1,6 @@
 export type DuplexType = 'TDD' | 'FDD' | 'SDL';
+export type TDDRatioMode = 'percent' | 'tddconfig';
+
 export type McsTablesLTE =
   | 'qam64pdsch'
   | 'qam64pusch'
@@ -26,4 +28,20 @@ export interface LayerLte {
 export interface Throughput {
   dl: number;
   ul: number;
+}
+
+export interface TDDRatioPercent {
+  dl: number;
+  ul: number;
+}
+
+export interface TDDConfig {
+  dlSubframes: number;
+  ulSubframes: number;
+  specialSubframes: number;
+}
+
+export interface SpecialSubframeConfig {
+  specialDlSymbols: number;
+  specialUlSymbols: number;
 }

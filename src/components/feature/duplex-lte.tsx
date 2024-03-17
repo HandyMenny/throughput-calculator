@@ -10,8 +10,7 @@ interface Props {
 export default component$(({ selectedValue, hidden }: Props) => {
   const duplexOptions = [
     { label: 'FDD', value: 'FDD' },
-    // tdd disabled
-    //{ label: 'TDD', value: 'TDD' },
+    { label: 'TDD', value: 'TDD' },
     { label: 'SDL', value: 'SDL' },
   ];
 

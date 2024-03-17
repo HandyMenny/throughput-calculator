@@ -5,13 +5,19 @@ import {
   useTask$,
 } from '@builder.io/qwik';
 import SelectInput from '../input/select-input';
-import type { DuplexType, Throughput, LayerLte } from '~/@types/layer-lte';
+import type {
+  DuplexType,
+  Throughput,
+  LayerLte,
+  TDDRatioPercent,
+} from '~/@types/layer-lte';
 import Throughtput from './throughtput';
 import { lteCalculator3gpp } from '~/helpers/calculator-lte';
 import DuplexLte from './duplex-lte';
 import BandwidthLte from './bandwidth-lte';
 import ModulationLte from './modulation-lte';
 import AggregateLte from './aggregate-lte';
+import TddRatioLte from './tdd-ratio-lte';
 
 interface Props {
   speed: Throughput;
@@ -25,6 +31,7 @@ export default component$(({ speed }: Props) => {
   const selectedRbDl = useSignal<number>(100);
   const selectedRbUl = useSignal<number>(100);
   const selectedAggregate = useSignal<string>('');
+  const selectedTddRatio = useSignal<TDDRatioPercent>({ dl: 0, ul: 0 });
 
   const mimoDlOptions = [
     { label: '1', value: '1' },
@@ -41,6 +48,7 @@ export default component$(({ speed }: Props) => {
     track(() => selectedRbDl.value);
     track(() => selectedRbUl.value);
     track(() => selectedAggregate.value);
+    track(() => selectedTddRatio.value);
 
     const rbDl = selectedRbDl.value;
     const rbUl = selectedRbUl.value;
@@ -51,9 +59,12 @@ export default component$(({ speed }: Props) => {
     let dlRatio = 1;
     let ulRatio = 1;
 
-    if (
-      !selectedAggregate.value.includes('dl')
-    ) {
+    if (selectedDuplex.value == 'TDD') {
+      dlRatio = selectedTddRatio.value.dl;
+      ulRatio = selectedTddRatio.value.ul;
+    }
+
+    if (!selectedAggregate.value.includes('dl')) {
       dlRatio = 0;
     }
 
@@ -80,7 +91,7 @@ export default component$(({ speed }: Props) => {
   });
 
   const showUl = useComputed$(() => selectedDuplex.value !== 'SDL');
-  //const showTDD = useComputed$(() => selectedDuplex.value === 'TDD');
+  const showTDD = useComputed$(() => selectedDuplex.value === 'TDD');
   return (
     <div class="m-4 border-2 border-solid border-gray-500 p-4">
       <Throughtput
@@ -112,6 +123,7 @@ export default component$(({ speed }: Props) => {
           ul={true}
           hidden={!showUl.value}
         />
+        <TddRatioLte selectedValue={selectedTddRatio} hidden={!showTDD.value} />
         <AggregateLte
           selectedDuplex={selectedDuplex.value}
           selectedValue={selectedAggregate}

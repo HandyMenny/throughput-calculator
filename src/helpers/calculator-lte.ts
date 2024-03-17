@@ -1,4 +1,10 @@
-import type { LayerLte, McsTablesLTE } from '~/@types/layer-lte';
+import type {
+  LayerLte,
+  McsTablesLTE,
+  SpecialSubframeConfig,
+  TDDConfig,
+  TDDRatioPercent,
+} from '~/@types/layer-lte';
 import { rb_bw_map } from './db/lte-rb-bw-map';
 import { mcstables } from './db/lte-mcs-tables';
 import { type TbsIndex, lteTbsTable } from './db/lte-tbs-table';
@@ -64,4 +70,27 @@ export function lteCalculator3gpp(layer: LayerLte, direction: 'dl' | 'ul') {
   const tbs = getTbs(layers, prb, tbsIndex);
 
   return tbs * 1000 * percentage;
+}
+
+export function getPercentageTddConfig(
+  subframesConfig: TDDConfig,
+  specialSubframeConfig: SpecialSubframeConfig,
+): TDDRatioPercent {
+  // normal cyclic prefix
+  const symbolsPerSubframe = 14;
+  const totalSubframes = 10;
+  const totalSymbols = totalSubframes * symbolsPerSubframe;
+
+  const { dlSubframes, ulSubframes, specialSubframes } = subframesConfig;
+  const { specialDlSymbols, specialUlSymbols } = specialSubframeConfig;
+
+  const dlSymbols =
+    dlSubframes * symbolsPerSubframe + specialDlSymbols * specialSubframes;
+  const ulSymbols =
+    ulSubframes * symbolsPerSubframe + specialUlSymbols * specialSubframes;
+
+  const dlPercent = dlSymbols / totalSymbols;
+  const ulPercent = ulSymbols / totalSymbols;
+
+  return { dl: dlPercent, ul: ulPercent };
 }
