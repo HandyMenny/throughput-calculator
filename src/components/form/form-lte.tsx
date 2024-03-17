@@ -14,7 +14,7 @@ export default component$(() => {
   const speeds: Throughput[] = useStore([{ dl: 0, ul: 0 }]);
 
   const totalSpeed = useComputed$(() => {
-    console.log('calculate speed')
+    console.log('calculate speed');
     return speeds.reduce((prev, curr) => {
       const newTput = { dl: 0, ul: 0 };
       newTput.dl = prev.dl + curr.dl;

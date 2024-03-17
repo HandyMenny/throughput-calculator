@@ -69,8 +69,11 @@ export default component$((props: Props) => {
     });
     Object.keys(mcsTable.alternative).map((key) => {
       (mcsTable.alternative as any)[key].map((it: string, altInd: number) => {
-        map.push({ label: key + ' - TBS ' + it, value: key + '-' + (altInd + 1) })
-      })
+        map.push({
+          label: key + ' - TBS ' + it,
+          value: key + '-' + (altInd + 1),
+        });
+      });
     });
 
     return map;
@@ -86,8 +89,8 @@ export default component$((props: Props) => {
     let mod;
     if (selectedMod.value == '-1') {
       const mcsTable = selectedMcsTable.value;
-      const index = selectedMcsIndex.value
-      const alt = parseInt(selectedMcsIndex.value.split("-")[1] || '0')
+      const index = selectedMcsIndex.value;
+      const alt = parseInt(selectedMcsIndex.value.split('-')[1] || '0');
       mod = getTbsIndexFromMcs(parseInt(index), mcsTable, alt);
     } else {
       mod = getClosestTbsIndex(parseInt(selectedMod.value), ul ? 'ul' : 'dl');
