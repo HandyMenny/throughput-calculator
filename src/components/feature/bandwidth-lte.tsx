@@ -5,15 +5,28 @@ import { getBwsSupported, getRb } from '~/helpers/calculator-lte';
 import type { rb_bw_map } from '~/helpers/db/lte-rb-bw-map';
 
 interface Props {
-  selectedValue?: Signal<number>;
-  prefix?: string;
+  selectedRBsDl: Signal<number>;
+  selectedRBsUl: Signal<number>;
+  hideDl?: boolean;
+  hideUl?: boolean;
+  prefixDl: string;
+  prefixUl: string;
   hidden?: boolean;
 }
 
 export default component$((props: Props) => {
-  const { prefix, selectedValue, hidden } = props;
+  const {
+    prefixDl,
+    prefixUl,
+    selectedRBsDl,
+    selectedRBsUl,
+    hidden,
+    hideDl,
+    hideUl,
+  } = props;
   const selectedBw = useSignal<string>('20');
-  const selectedRb = useSignal<number>(100);
+  const manualRbDl = useSignal<number>(100);
+  const manualRbUl = useSignal<number>(100);
 
   const bandwidthOptions = (() => {
     const result = getBwsSupported();
@@ -33,33 +46,40 @@ export default component$((props: Props) => {
 
   useTask$(({ track }) => {
     track(() => selectedBw.value);
-    track(() => selectedRb.value);
+    track(() => manualRbDl.value);
+    track(() => manualRbUl.value);
 
-    if (selectedValue == null) return;
-
-    let rb;
+    const rb = { dl: 0, ul: 0 };
     if (selectedBw.value == 'manual') {
-      rb = selectedRb.value;
+      rb.dl = manualRbDl.value;
+      rb.ul = manualRbUl.value;
     } else {
-      rb = getRb(selectedBw.value as rb_bw_map.lteBWs);
+      rb.dl = rb.ul = getRb(selectedBw.value as rb_bw_map.lteBWs);
     }
-    selectedValue.value = rb;
+    selectedRBsDl.value = rb.dl;
+    selectedRBsUl.value = rb.ul;
   });
 
   return (
     <>
       <SelectInput
-        label={`${prefix} Bandwdith`}
+        label={`Bandwdith`}
         labelClass="text-center"
         options={bandwidthOptions}
         selectedValue={selectedBw}
         hidden={hidden}
       />
       <NumberInput
-        label={`${prefix} RBs`}
+        label={`${prefixDl} RBs`}
         labelClass="text-center"
-        selectedValue={selectedRb}
-        hidden={hidden || selectedBw.value !== 'manual'}
+        selectedValue={manualRbDl}
+        hidden={hidden || selectedBw.value !== 'manual' || hideDl}
+      />
+      <NumberInput
+        label={`${prefixUl} RBs`}
+        labelClass="text-center"
+        selectedValue={manualRbUl}
+        hidden={hidden || selectedBw.value !== 'manual' || hideUl}
       />
     </>
   );

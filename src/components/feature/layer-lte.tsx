@@ -104,11 +104,12 @@ export default component$(({ speed }: Props) => {
       />
       <div class="grid grid-cols-1 items-end gap-x-5 gap-y-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
         <DuplexLte selectedValue={selectedDuplex} />
-        <BandwidthLte prefix={'Downlink'} selectedValue={selectedRbDl} />
         <BandwidthLte
-          prefix={'Uplink'}
-          selectedValue={selectedRbUl}
-          hidden={!showUl.value}
+          prefixDl={'Downlink'}
+          prefixUl={'Uplink'}
+          selectedRBsDl={selectedRbDl}
+          selectedRBsUl={selectedRbUl}
+          hideUl={!showUl.value}
         />
         <SelectInput
           label={'Downlink Mimo Layers'}
