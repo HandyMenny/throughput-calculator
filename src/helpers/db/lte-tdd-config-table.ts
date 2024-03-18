@@ -23,5 +23,7 @@ export namespace tddconfigs {
     { specialDlSymbols: 9, specialUlSymbols: 2 },
     { specialDlSymbols: 10, specialUlSymbols: 2 },
     { specialDlSymbols: 11, specialUlSymbols: 2 },
+    { specialDlSymbols: 6, specialUlSymbols: 2 },
+    { specialDlSymbols: 6, specialUlSymbols: 6 },
   ];
 }
