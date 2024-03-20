@@ -23,8 +23,8 @@ interface Props {
 export default component$((props: Props) => {
   const { prefix, selectedValue, ul, hidden } = props;
 
-  const selectedMod = useSignal<string>('6');
-  const selectedMcsTable = useSignal<McsTablesLTE>('qam64pdsch');
+  const selectedMod = useSignal<string>('8');
+  const selectedMcsTable = useSignal<McsTablesLTE>('qam256pdsch');
   const selectedMcsIndex = useSignal<string>('0');
 
   const modulationOptions = useComputed$(() => {

@@ -30,7 +30,7 @@ export default component$(({ speed }: Props) => {
   const selectedMimoDl = useSignal<string>('2');
   const selectedRbDl = useSignal<number>(100);
   const selectedRbUl = useSignal<number>(100);
-  const selectedAggregate = useSignal<string>('');
+  const selectedAggregate = useSignal<string>('dl-ul');
   const selectedTddRatio = useSignal<TDDRatioPercent>({ dl: 0, ul: 0 });
 
   const mimoDlOptions = [

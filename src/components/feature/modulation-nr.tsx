@@ -22,10 +22,10 @@ interface Props {
 export default component$((props: Props) => {
   const { prefix, selectedValue, ul, dft, hidden } = props;
 
-  const selectedMod = useSignal<string>('6');
-  const selectedMcsTable = useSignal<McsTablesNR>('qam64');
+  const selectedMod = useSignal<string>('8');
+  const selectedMcsTable = useSignal<McsTablesNR>('qam256');
   const selectedMcsIndex = useSignal<string>('0');
-  const selectedModulationOrder = useSignal<string>('6');
+  const selectedModulationOrder = useSignal<string>('8');
   const selectedCodeRate = useSignal<number>(0.92578125);
 
   const modulationOrderOptions = useComputed$(() => {
