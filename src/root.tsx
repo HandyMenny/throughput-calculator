@@ -15,13 +15,11 @@ export default component$(() => {
    *
    * Don't remove the `<head>` and `<body>` elements.
    */
-  const basePath = import.meta.env.PUBLIC_BASE_PATH || '/';
 
   return (
     <QwikCityProvider>
       <head>
         <meta charSet="utf-8" />
-        <link rel="manifest" href={`${basePath}manifest.json`} />
         <RouterHead />
       </head>
       <body lang="en">
