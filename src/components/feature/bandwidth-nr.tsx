@@ -71,7 +71,13 @@ export default component$((props: Props) => {
     const range = selectedRange;
     const scs = selectedScs;
 
-    if (isNaN(scs)) return [];
+    if (
+      isNaN(scs) ||
+      (range == 'fr2' && scs < 2) ||
+      (range == 'fr1' && scs > 2)
+    ) {
+      return [];
+    }
 
     const result = getBwsSupported(range, scs);
 
