@@ -31,7 +31,9 @@ export function getClosestTbsIndex(
     case 6:
       return '26';
     case 8:
-      return direction == 'dl' ? '33' : '34';
+      return '33';
+    case 9:
+      return direction == 'dl' ? '33B' : '34';
     case 10:
       return '37';
   }

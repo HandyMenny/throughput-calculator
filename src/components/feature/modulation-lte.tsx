@@ -28,17 +28,20 @@ export default component$((props: Props) => {
   const selectedMcsIndex = useSignal<string>('0');
 
   const modulationOptions = useComputed$(() => {
+    const qam256qamPlus = ul ? 'TBS 34' : 'TBS 33B';
+
     const arr = [
       { label: 'QPSK', value: '2' },
       { label: '16QAM', value: '4' },
       { label: '64QAM', value: '6' },
-      { label: '256QAM', value: '8' },
+      { label: '256QAM - TBS 33', value: '8' },
+      { label: `256QAM - ${qam256qamPlus}`, value: '9' },
       { label: 'MCS index', value: '-1' },
     ];
 
     if (!ul) {
       const qam1024 = { label: '1024QAM', value: '10' };
-      arr.splice(4, 0, qam1024);
+      arr.splice(5, 0, qam1024);
     }
     return arr;
   });
