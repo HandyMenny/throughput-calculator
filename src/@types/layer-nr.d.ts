@@ -70,7 +70,7 @@ export interface UlTxSwitchPair {
 
 export interface ThroughputWithUnit {
   value: number;
-  unit: ThroughputUnit;
+  unit?: ThroughputUnit;
 }
 
 export interface Overhead {
