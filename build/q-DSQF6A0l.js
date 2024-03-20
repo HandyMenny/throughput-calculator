@@ -1,7 +1,0 @@
-function __vite__mapDeps(indexes) {
-  if (!__vite__mapDeps.viteFileDeps) {
-    __vite__mapDeps.viteFileDeps = []
-  }
-  return indexes.map((i) => __vite__mapDeps.viteFileDeps[i])
-}
-import{r as u,t as d,v as _,w as h,x as R,y as v,z as y,A as P}from"./q-Dyu2sCja.js";import{$ as g,x,l as z,T as b,E as i,q as w,_ as F,U as S,K as c,w as U}from"./q-_JLpC6VS.js";const E=async({track:t,cleanup:s})=>{const[n,e]=g(),r=t(()=>{var a;return(a=e.anchorRef)==null?void 0:a.value}),o=t(()=>n.value);if(!o||!r)return;o.hidden=!1;const l=u(r,o,async()=>{const a=[d(e.gutter),_({strategy:e.hide}),(e.flip??!0)&&h(),e.shift&&R(),(e.autoPlacement??!1)&&v()];await y(r,o,{placement:e.placement??"bottom",middleware:a}).then(async p=>{const{x:m,y:f}=p;Object.assign(o.style,{left:`${m}px`,top:`${f}px`,transform:e.transform})})},{ancestorScroll:e.ancestorScroll??!0,ancestorResize:e.ancestorResize??!0,elementResize:e.elementResize??!0,animationFrame:e.animationFrame??!1});s(l)},M=t=>{const s=x(t,["anchorRef","gutter","flip","placement","shift","hide","autoPlacement","ancestorScroll","ancestorResize","elementResize","animationFrame","transform"]),n=z(),e=s.popoverRef||n;return b(w(()=>F(()=>Promise.resolve().then(()=>O),void 0),"s_4cg00CVX0xM",[e,t])),i(P,{hidden:!0,...s,children:i(S,null,3,"Up_0"),ref:e,[c]:{hidden:c}},0,"Up_1")},O=Object.freeze(Object.defineProperty({__proto__:null,_hW:U,s_4cg00CVX0xM:E,s_R2yn00u69dM:M},Symbol.toStringTag,{value:"Module"}));export{U as _hW,E as s_4cg00CVX0xM,M as s_R2yn00u69dM};
