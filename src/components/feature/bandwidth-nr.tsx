@@ -130,13 +130,13 @@ export default component$((props: Props) => {
       <NumberInput
         label={`${prefixDl} RBs`}
         labelClass="text-center"
-        selectedValue={selectedRBsDl}
+        selectedValue={manualRbDl}
         hidden={hidden || selectedBw.value !== 'manual' || hideDl}
       />
       <NumberInput
         label={`${prefixUl} RBs`}
         labelClass="text-center"
-        selectedValue={selectedRBsUl}
+        selectedValue={manualRbUl}
         hidden={hidden || selectedBw.value !== 'manual' || hideUl}
       />
     </>
