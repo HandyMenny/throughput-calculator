@@ -42,8 +42,8 @@ export default component$(({ speed, ulTxSwitchPair, txReduction }: Props) => {
   const selectedMimoDl = useSignal<string>('');
   const selectedMimoUl = useSignal<string>('');
   const selectedWaveform = useSignal<string>('');
-  const selectedRbDl = useSignal<number>(100);
-  const selectedRbUl = useSignal<number>(100);
+  const selectedRbDl = useSignal<number>(106);
+  const selectedRbUl = useSignal<number>(106);
   const tddRatio = useSignal<TDDRatioPercent>({
     dl: 0.74,
     ul: 0.23,

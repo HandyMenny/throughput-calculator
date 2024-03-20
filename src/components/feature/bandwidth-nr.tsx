@@ -37,9 +37,9 @@ export default component$((props: Props) => {
     hideDl,
     hideUl,
   } = props;
-  const selectedBw = useSignal<string>('');
-  const manualRbDl = useSignal<number>(100);
-  const manualRbUl = useSignal<number>(100);
+  const selectedBw = useSignal<string>('20');
+  const manualRbDl = useSignal<number>(106);
+  const manualRbUl = useSignal<number>(106);
 
   const prbLabel = $(
     (
