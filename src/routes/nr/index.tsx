@@ -1,11 +1,11 @@
 import { component$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
-import Form from '~/components/form/form-nr';
+import FormNr from '~/components/form/form-nr';
 
 export default component$(() => {
   return (
     <>
-      <Form />
+      <FormNr />
     </>
   );
 });
