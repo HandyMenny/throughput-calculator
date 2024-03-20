@@ -1,5 +1,5 @@
 {
-  "manifestHash": "pv92ub",
+  "manifestHash": "6dfus1",
   "symbols": {
     "s_koFKDjM01VA": {
       "origin": "../node_modules/@qwik-ui/headless/index.qwik.mjs",
@@ -37,8 +37,8 @@
       "captures": true,
       "parent": "s_TxCFOy819ag",
       "loc": [
-        26967,
-        36138
+        26971,
+        36142
       ]
     },
     "s_0fw3VrSiM5I": {
@@ -1915,8 +1915,8 @@
       "ctxName": "component$",
       "captures": false,
       "loc": [
-        38122,
-        40794
+        38126,
+        40798
       ]
     },
     "s_8jStdhhbffA": {
@@ -3111,8 +3111,8 @@
       "ctxName": "component$",
       "captures": false,
       "loc": [
-        51106,
-        52457
+        51110,
+        52461
       ]
     },
     "s_NqQX0q5xAFg": {
@@ -3605,8 +3605,8 @@
       "ctxName": "component$",
       "captures": false,
       "loc": [
-        23697,
-        36425
+        23701,
+        36429
       ]
     },
     "s_UNu79M0kP9I": {
@@ -3839,8 +3839,8 @@
       "ctxName": "component$",
       "captures": false,
       "loc": [
-        36709,
-        38003
+        36713,
+        38007
       ]
     },
     "s_WuVZHEQn1Zg": {
@@ -4476,8 +4476,8 @@
       "ctxName": "component$",
       "captures": false,
       "loc": [
-        7807,
-        8521
+        7811,
+        8525
       ]
     },
     "s_eJRbBqVd38E": {
@@ -6432,8 +6432,8 @@
       "captures": false,
       "parent": "s_TxCFOy819ag",
       "loc": [
-        23752,
-        23786
+        23756,
+        23790
       ]
     },
     "s_G1aLUyaL1QQ": {
@@ -6694,8 +6694,8 @@
       "ctxName": "submit",
       "captures": true,
       "loc": [
-        41840,
-        43474
+        41844,
+        43478
       ]
     },
     "s_ASQcAhU0NT4": {
@@ -6863,8 +6863,8 @@
       "ctxName": "stuff",
       "captures": true,
       "loc": [
-        46796,
-        48992
+        46800,
+        48996
       ]
     },
     "s_x0idL0BpEos": {
@@ -6960,8 +6960,8 @@
       "captures": false,
       "parent": "s_WmYC5H00wtI",
       "loc": [
-        37124,
-        37202
+        37128,
+        37206
       ]
     },
     "s_CDZM5Wl1qYA": {
@@ -7170,8 +7170,8 @@
       "captures": false,
       "parent": "s_8gdLBszqbaM",
       "loc": [
-        38865,
-        39196
+        38869,
+        39200
       ]
     },
     "s_Qc9xlwbsj0Q": {
@@ -7576,8 +7576,8 @@
       "captures": true,
       "parent": "s_TxCFOy819ag",
       "loc": [
-        25036,
-        26355
+        25040,
+        26359
       ]
     },
     "s_flm2HZRc0gQ": {
@@ -7856,8 +7856,8 @@
       "captures": true,
       "parent": "s_Nk9PlpjQm9Y",
       "loc": [
-        51413,
-        52110
+        51417,
+        52114
       ]
     },
     "s_pIf0khHUxfY": {
@@ -7870,8 +7870,8 @@
       "captures": true,
       "parent": "s_8gdLBszqbaM",
       "loc": [
-        39623,
-        40143
+        39627,
+        40147
       ]
     },
     "s_pM4HfopD0LY": {
@@ -15105,7 +15105,7 @@
     }
   },
   "platform": {
-    "qwik": "1.5.0",
+    "qwik": "1.5.1",
     "vite": "",
     "rollup": "4.13.0",
     "env": "node",
