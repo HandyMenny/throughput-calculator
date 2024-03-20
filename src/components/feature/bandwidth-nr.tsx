@@ -13,7 +13,7 @@ import type { FreqRangeType } from '~/@types/layer-nr';
 
 interface Props {
   selectedRange: FreqRangeType;
-  selectedScs: number;
+  numerology: number;
   selectedRBsDl: Signal<number>;
   selectedRBsUl: Signal<number>;
   hideDl?: boolean;
@@ -31,7 +31,7 @@ export default component$((props: Props) => {
     selectedRBsDl,
     selectedRBsUl,
     selectedRange,
-    selectedScs,
+    numerology,
     dftUl,
     hidden,
     hideDl,
@@ -44,14 +44,14 @@ export default component$((props: Props) => {
   const prbLabel = $(
     (
       bw: number,
-      scs: number,
+      numerology: number,
       range: FreqRangeType,
       dftUl: boolean | undefined,
       includeDl: boolean,
       includeUl: boolean,
     ) => {
-      const ulRb = getPrb(bw, scs, range, dftUl)?.toString();
-      const dlRb = getPrb(bw, scs, range)?.toString();
+      const ulRb = getPrb(bw, numerology, range, dftUl)?.toString();
+      const dlRb = getPrb(bw, numerology, range)?.toString();
 
       let rb = dlRb;
 
@@ -68,23 +68,23 @@ export default component$((props: Props) => {
   );
 
   const bandwidthOptions = useComputed$(async () => {
+    console.log('calculating bandwidth');
     const range = selectedRange;
-    const scs = selectedScs;
 
     if (
-      isNaN(scs) ||
-      (range == 'fr2' && scs < 2) ||
-      (range == 'fr1' && scs > 2)
+      isNaN(numerology) ||
+      (range == 'fr2' && numerology < 2) ||
+      (range == 'fr1' && numerology > 2)
     ) {
       return [];
     }
 
-    const result = getBwsSupported(range, scs);
+    const result = getBwsSupported(range, numerology);
 
     const map = await Promise.all(
       result.map(async (it) => {
         return {
-          label: await prbLabel(it, scs, range, dftUl, !hideDl, !hideUl),
+          label: await prbLabel(it, numerology, range, dftUl, !hideDl, !hideUl),
           value: it.toString(),
         };
       }),
@@ -100,7 +100,7 @@ export default component$((props: Props) => {
     track(() => selectedBw.value);
     track(() => manualRbDl.value);
     track(() => manualRbUl.value);
-    track(() => selectedScs);
+    track(() => numerology);
     track(() => selectedRange);
 
     const rb = { dl: 0, ul: 0 };
@@ -109,9 +109,9 @@ export default component$((props: Props) => {
       rb.ul = manualRbUl.value;
     } else {
       rb.dl =
-        getPrb(parseInt(selectedBw.value), selectedScs, selectedRange) ?? 0;
+        getPrb(parseInt(selectedBw.value), numerology, selectedRange) ?? 0;
       rb.ul =
-        getPrb(parseInt(selectedBw.value), selectedScs, selectedRange, dftUl) ??
+        getPrb(parseInt(selectedBw.value), numerology, selectedRange, dftUl) ??
         0;
     }
     selectedRBsDl.value = rb.dl;

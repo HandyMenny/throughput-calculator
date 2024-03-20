@@ -180,7 +180,7 @@ export default component$(({ speed, ulTxSwitchPair, txReduction }: Props) => {
           prefixDl={'Downlink'}
           prefixUl={'Uplink'}
           selectedRange={selectedRange.value}
-          selectedScs={parseInt(selectedNumerology.value)}
+          numerology={parseInt(selectedNumerology.value)}
           selectedRBsDl={selectedRbDl}
           selectedRBsUl={selectedRbUl}
           dftUl={selectedWaveform.value == 'true'}
@@ -221,7 +221,7 @@ export default component$(({ speed, ulTxSwitchPair, txReduction }: Props) => {
           hidden={!showUl.value}
         />
         <TddRatioNr
-          selectedScs={parseInt(selectedNumerology.value)}
+          numerology={parseInt(selectedNumerology.value)}
           selectedValue={tddRatio}
           hidden={!showTDD.value}
         />

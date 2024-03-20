@@ -11,13 +11,13 @@ import type {
 } from '~/@types/layer-nr';
 
 interface Props {
-  selectedScs: number;
+  numerology: number;
   selectedValue?: Signal<TDDRatioPercent>;
   hidden?: boolean;
 }
 
 export default component$((props: Props) => {
-  const { selectedValue, selectedScs, hidden } = props;
+  const { selectedValue, numerology, hidden } = props;
   const selectedTDDRatioMode = useSignal<TDDRatioMode>('percent');
   const selectedPattern = useSignal<TDDCommonPattern>({
     periodicity: 0,
@@ -50,7 +50,7 @@ export default component$((props: Props) => {
   ];
 
   useTask$(({ track }) => {
-    track(() => selectedScs);
+    track(() => numerology);
     track(() => selectedTDDRatioMode.value);
     track(() => selectedFlexSymbols.value);
     track(() => selectedPattern.value);
@@ -75,7 +75,7 @@ export default component$((props: Props) => {
           : undefined;
 
       tddRatio = getPercentageFromPatterns(
-        selectedScs,
+        numerology,
         flexSymbols,
         pattern,
         pattern2,
