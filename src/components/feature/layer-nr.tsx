@@ -2,7 +2,7 @@ import {
   component$,
   useComputed$,
   useSignal,
-  useTask$,
+  useVisibleTask$,
 } from '@builder.io/qwik';
 import SelectInput from '../input/select-input';
 import { calculateOne, dftPrb } from '~/helpers/calculator';
@@ -76,80 +76,85 @@ export default component$(({ speed, ulTxSwitchPair, txReduction }: Props) => {
     { label: 'DFT-s-OFDM', value: 'true' },
   ];
 
-  useTask$(({ track }) => {
-    track(() => selectedRange.value);
-    track(() => selectedDuplex.value);
-    track(() => selectedNumerology.value);
-    track(() => selectedModDl.value);
-    track(() => selectedModUl.value);
-    track(() => selectedMimoDl.value);
-    track(() => selectedMimoUl.value);
-    track(() => selectedWaveform.value);
-    track(() => selectedRbDl.value);
-    track(() => selectedRbUl.value);
-    track(() => selectedAggregate.value);
-    track(() => tddRatio.value);
-    track(() => selectedOverhead.value);
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(
+    ({ track }) => {
+      console.log('layer nr speed calculation');
+      track(() => selectedRange.value);
+      track(() => selectedDuplex.value);
+      track(() => selectedNumerology.value);
+      track(() => selectedModDl.value);
+      track(() => selectedModUl.value);
+      track(() => selectedMimoDl.value);
+      track(() => selectedMimoUl.value);
+      track(() => selectedWaveform.value);
+      track(() => selectedRbDl.value);
+      track(() => selectedRbUl.value);
+      track(() => selectedAggregate.value);
+      track(() => tddRatio.value);
+      track(() => selectedOverhead.value);
 
-    const numerology = parseInt(selectedNumerology.value);
-    const range = selectedRange.value;
-    const dft = selectedWaveform.value == 'true';
-    const rbDl = selectedRbDl.value;
-    let rbUl = selectedRbUl.value;
-    if (dft) rbUl = dftPrb(rbUl);
+      const numerology = parseInt(selectedNumerology.value);
+      const range = selectedRange.value;
+      const dft = selectedWaveform.value == 'true';
+      const rbDl = selectedRbDl.value;
+      let rbUl = selectedRbUl.value;
+      if (dft) rbUl = dftPrb(rbUl);
 
-    const modDl: Modulation = selectedModDl.value;
-    const modUl: Modulation = selectedModUl.value;
+      const modDl: Modulation = selectedModDl.value;
+      const modUl: Modulation = selectedModUl.value;
 
-    let dlRatio = 1;
-    let ulRatio = 1;
+      let dlRatio = 1;
+      let ulRatio = 1;
 
-    if (selectedDuplex.value == 'TDD') {
-      dlRatio = tddRatio.value.dl;
-      ulRatio = tddRatio.value.ul;
-    }
+      if (selectedDuplex.value == 'TDD') {
+        dlRatio = tddRatio.value.dl;
+        ulRatio = tddRatio.value.ul;
+      }
 
-    if (
-      selectedDuplex.value == 'SUL' ||
-      !selectedAggregate.value.includes('dl')
-    ) {
-      dlRatio = 0;
-    }
+      if (
+        selectedDuplex.value == 'SUL' ||
+        !selectedAggregate.value.includes('dl')
+      ) {
+        dlRatio = 0;
+      }
 
-    if (
-      selectedDuplex.value == 'SDL' ||
-      !selectedAggregate.value.includes('ul')
-    ) {
-      ulRatio = 0;
-    }
+      if (
+        selectedDuplex.value == 'SDL' ||
+        !selectedAggregate.value.includes('ul')
+      ) {
+        ulRatio = 0;
+      }
 
-    const layer: LayerNr = {
-      range: range,
-      numerology: numerology,
-      duplex: selectedDuplex.value,
-      resourceBlocksDl: rbDl,
-      resourceBlocksUl: rbUl,
-      mimoDl: parseInt(selectedMimoDl.value),
-      mimoUl: parseInt(selectedMimoUl.value),
-      modDl: modDl,
-      modUl: modUl,
-      dlPercentage: dlRatio,
-      ulPercentage: ulRatio,
-      ulTransformPrecoding: dft,
-      dlOverhead: selectedOverhead.value.dl,
-      ulOverhead: selectedOverhead.value.ul,
-    };
+      const layer: LayerNr = {
+        range: range,
+        numerology: numerology,
+        duplex: selectedDuplex.value,
+        resourceBlocksDl: rbDl,
+        resourceBlocksUl: rbUl,
+        mimoDl: parseInt(selectedMimoDl.value),
+        mimoUl: parseInt(selectedMimoUl.value),
+        modDl: modDl,
+        modUl: modUl,
+        dlPercentage: dlRatio,
+        ulPercentage: ulRatio,
+        ulTransformPrecoding: dft,
+        dlOverhead: selectedOverhead.value.dl,
+        ulOverhead: selectedOverhead.value.ul,
+      };
 
-    speed.dl = calculateOne(layer, 'dl');
-    speed.ul = calculateOne(layer, 'ul');
+      speed.dl = calculateOne(layer, 'dl');
+      speed.ul = calculateOne(layer, 'ul');
 
-    ulTxSwitchPair.on = selectedAggregate.value.includes('ul-tx-switch');
-    if (ulTxSwitchPair.on) {
-      ulTxSwitchPair.airtime = layer.ulPercentage;
-      ulTxSwitchPair.throughput = speed.ul;
-      ulTxSwitchPair.mimo = layer.mimoUl;
-    }
-  });
+      ulTxSwitchPair.on = selectedAggregate.value.includes('ul-tx-switch');
+      if (ulTxSwitchPair.on) {
+        ulTxSwitchPair.airtime = layer.ulPercentage;
+        ulTxSwitchPair.throughput = speed.ul;
+        ulTxSwitchPair.mimo = layer.mimoUl;
+      }
+    },
+    { strategy: 'document-ready' },
+  );
 
   const showDl = useComputed$(() => selectedDuplex.value !== 'SUL');
   const showUl = useComputed$(() => selectedDuplex.value !== 'SDL');

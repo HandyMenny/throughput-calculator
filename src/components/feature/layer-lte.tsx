@@ -2,7 +2,7 @@ import {
   component$,
   useComputed$,
   useSignal,
-  useTask$,
+  useVisibleTask$,
 } from '@builder.io/qwik';
 import SelectInput from '../input/select-input';
 import type {
@@ -40,55 +40,60 @@ export default component$(({ speed }: Props) => {
     { label: '4', value: '4' },
   ];
 
-  useTask$(({ track }) => {
-    track(() => selectedDuplex.value);
-    track(() => selectedModDl.value);
-    track(() => selectedModUl.value);
-    track(() => selectedMimoDl.value);
-    track(() => selectedRbDl.value);
-    track(() => selectedRbUl.value);
-    track(() => selectedAggregate.value);
-    track(() => selectedTddRatio.value);
+  // eslint-disable-next-line qwik/no-use-visible-task
+  useVisibleTask$(
+    ({ track }) => {
+      console.log('layer lte speed calculation');
+      track(() => selectedDuplex.value);
+      track(() => selectedModDl.value);
+      track(() => selectedModUl.value);
+      track(() => selectedMimoDl.value);
+      track(() => selectedRbDl.value);
+      track(() => selectedRbUl.value);
+      track(() => selectedAggregate.value);
+      track(() => selectedTddRatio.value);
 
-    const rbDl = selectedRbDl.value;
-    const rbUl = selectedRbUl.value;
+      const rbDl = selectedRbDl.value;
+      const rbUl = selectedRbUl.value;
 
-    const modDl = selectedModDl.value;
-    const modUl = selectedModUl.value;
+      const modDl = selectedModDl.value;
+      const modUl = selectedModUl.value;
 
-    let dlRatio = 1;
-    let ulRatio = 1;
+      let dlRatio = 1;
+      let ulRatio = 1;
 
-    if (selectedDuplex.value == 'TDD') {
-      dlRatio = selectedTddRatio.value.dl;
-      ulRatio = selectedTddRatio.value.ul;
-    }
+      if (selectedDuplex.value == 'TDD') {
+        dlRatio = selectedTddRatio.value.dl;
+        ulRatio = selectedTddRatio.value.ul;
+      }
 
-    if (!selectedAggregate.value.includes('dl')) {
-      dlRatio = 0;
-    }
+      if (!selectedAggregate.value.includes('dl')) {
+        dlRatio = 0;
+      }
 
-    if (
-      selectedDuplex.value == 'SDL' ||
-      !selectedAggregate.value.includes('ul')
-    ) {
-      ulRatio = 0;
-    }
+      if (
+        selectedDuplex.value == 'SDL' ||
+        !selectedAggregate.value.includes('ul')
+      ) {
+        ulRatio = 0;
+      }
 
-    const layer: LayerLte = {
-      duplex: selectedDuplex.value,
-      resourceBlocksDl: rbDl,
-      resourceBlocksUl: rbUl,
-      mimoDl: parseInt(selectedMimoDl.value),
-      tbsIndexDl: modDl,
-      tbsIndexUl: modUl,
-      dlPercentage: dlRatio,
-      ulPercentage: ulRatio,
-    };
+      const layer: LayerLte = {
+        duplex: selectedDuplex.value,
+        resourceBlocksDl: rbDl,
+        resourceBlocksUl: rbUl,
+        mimoDl: parseInt(selectedMimoDl.value),
+        tbsIndexDl: modDl,
+        tbsIndexUl: modUl,
+        dlPercentage: dlRatio,
+        ulPercentage: ulRatio,
+      };
 
-    speed.dl = lteCalculator3gpp(layer, 'dl');
-    speed.ul = lteCalculator3gpp(layer, 'ul');
-  });
+      speed.dl = lteCalculator3gpp(layer, 'dl');
+      speed.ul = lteCalculator3gpp(layer, 'ul');
+    },
+    { strategy: 'document-ready' },
+  );
 
   const showUl = useComputed$(() => selectedDuplex.value !== 'SDL');
   const showTDD = useComputed$(() => selectedDuplex.value === 'TDD');
