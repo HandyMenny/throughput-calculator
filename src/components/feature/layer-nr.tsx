@@ -18,7 +18,7 @@ import type {
 } from '~/@types/layer-nr';
 import FreqRange from './freq-range';
 import Scs from './scs';
-import Bandwidth from './bandwidth';
+import Bandwidth from './bandwidth-nr';
 import ModulationNr from './modulation-nr';
 import TddRatioNr from './tdd-ratio-nr';
 import Duplex from './duplex';
@@ -177,19 +177,15 @@ export default component$(({ speed, ulTxSwitchPair, txReduction }: Props) => {
           selectedValue={selectedNumerology}
         />
         <Bandwidth
-          prefix={'Downlink'}
+          prefixDl={'Downlink'}
+          prefixUl={'Uplink'}
           selectedRange={selectedRange.value}
           selectedScs={parseInt(selectedNumerology.value)}
-          selectedValue={selectedRbDl}
-          hidden={!showDl.value}
-        />
-        <Bandwidth
-          prefix={'Uplink'}
-          selectedRange={selectedRange.value}
-          selectedScs={parseInt(selectedNumerology.value)}
-          selectedValue={selectedRbUl}
-          dft={selectedWaveform.value == 'true'}
-          hidden={!showUl.value}
+          selectedRBsDl={selectedRbDl}
+          selectedRBsUl={selectedRbUl}
+          dftUl={selectedWaveform.value == 'true'}
+          hideDl={!showDl.value}
+          hideUl={!showUl.value}
         />
         <SelectInput
           label={'Downlink Mimo Layers'}
