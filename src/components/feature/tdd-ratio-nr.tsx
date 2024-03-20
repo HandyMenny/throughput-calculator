@@ -38,7 +38,7 @@ export default component$((props: Props) => {
   const ulPercentage = useSignal<number>(23);
 
   const tddRatioModes = [
-    { label: 'DL/UL percentage', value: 'percent' },
+    { label: 'DL/UL %', value: 'percent' },
     { label: 'Common pattern', value: 'pattern' },
     { label: 'Common pattern1 + pattern2', value: 'pattern12' },
   ];

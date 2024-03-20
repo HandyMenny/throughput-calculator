@@ -19,7 +19,7 @@ export default component$((props: Props) => {
   const specialSubframeConfig = useSignal<string>('7');
 
   const tddRatioModes = [
-    { label: 'DL/UL percentage', value: 'percent' },
+    { label: 'DL/UL %', value: 'percent' },
     { label: 'TDD config', value: 'tddconfig' },
   ];
 
