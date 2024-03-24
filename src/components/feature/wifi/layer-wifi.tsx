@@ -11,6 +11,7 @@ import {
   layerWifiTputCalculator,
 } from '~/helpers/calculator-wifi';
 import GuardIntervalWifi from './guard-interval-wifi';
+import NumberInput from '~/components/input/number-input';
 
 interface Props {
   speed: Throughput;
@@ -22,6 +23,7 @@ export default component$(({ speed }: Props) => {
   const selectedMimo = useSignal<number>(2);
   const selectedMod = useSignal<Modulation>({ modOrder: 6, codeRate: 5 / 6 });
   const selectedGi = useSignal<number>((0.4 ** 10) ^ -6);
+  const selectedOverhead = useSignal<number>(0);
 
   // eslint-disable-next-line qwik/no-use-visible-task
   useVisibleTask$(
@@ -32,6 +34,7 @@ export default component$(({ speed }: Props) => {
       track(() => selectedMimo.value);
       track(() => selectedMod.value);
       track(() => selectedGi.value);
+      track(() => selectedOverhead.value);
 
       const layer: LayerWifi = {
         standard: selectedStandard.value,
@@ -40,7 +43,7 @@ export default component$(({ speed }: Props) => {
         mimo: selectedMimo.value,
         mod: selectedMod.value,
         guardInterval: selectedGi.value,
-        overhead: 0,
+        overhead: selectedOverhead.value / 100,
       };
 
       speed.dl = speed.ul = layerWifiTputCalculator(layer);
@@ -77,6 +80,13 @@ export default component$(({ speed }: Props) => {
         <GuardIntervalWifi
           standard={selectedStandard.value}
           selectedValue={selectedGi}
+        />
+        <NumberInput
+          label={'Overhead %'}
+          labelClass="text-center"
+          min={0}
+          max={100}
+          selectedValue={selectedOverhead}
         />
       </div>
     </div>
