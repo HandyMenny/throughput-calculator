@@ -19,6 +19,8 @@ export default component$((props: Props) => {
   const dlResult = autoScaleSpeed(dl);
   const ulResult = autoScaleSpeed(ul);
 
+  const symmetric = dl == ul;
+
   return (
     <div class={props.class}>
       <ArrowDownCircleIcon
@@ -27,8 +29,8 @@ export default component$((props: Props) => {
         strokeWidth={iconStroke}
       />
       {dlResult.value} {dlResult.unit}
-      <span class="px-1.5">{dlUlSeparator}</span>
-      {ulResult.value}
+      {!symmetric && <span class="px-1.5">{dlUlSeparator}</span>}
+      {!symmetric && `${ulResult.value} ${ulResult.unit}`}
       <ArrowUpCircleIcon
         class="box-content inline px-1.5 pb-[5px]"
         size={iconSize}
