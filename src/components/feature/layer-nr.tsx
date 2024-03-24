@@ -193,14 +193,14 @@ export default component$(({ speed, ulTxSwitchPair, txReduction }: Props) => {
           hideUl={!showUl.value}
         />
         <SelectInput
-          label={'Downlink Mimo Layers'}
+          label={'Downlink MIMO Layers'}
           labelClass="text-center"
           options={mimoDlOptions}
           selectedValue={selectedMimoDl}
           hidden={!showDl.value}
         />
         <SelectInput
-          label={'Uplink Mimo Layers'}
+          label={'Uplink MIMO Layers'}
           labelClass="text-center"
           options={mimoUlOptions.value}
           selectedValue={selectedMimoUl}

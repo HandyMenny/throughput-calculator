@@ -42,7 +42,7 @@ export default component$((props: Props) => {
   return (
     <>
       <SelectInput
-        label={'MiMo'}
+        label={'MIMO'}
         labelClass="text-center"
         options={mimoOptions.value}
         selectedValue={selectedMimo}
