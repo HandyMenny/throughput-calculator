@@ -44,6 +44,8 @@ export default component$((props: Props) => {
 
   useTask$(({ track }) => {
     track(() => selectedGi.value);
+    track(() => standard);
+
     if (standard == 'ht' || standard == 'vht') {
       selectedValue.value =
         selectedGi.value == 'short' ? 0.4 * 10 ** -6 : 0.8 * 10 ** -6;
