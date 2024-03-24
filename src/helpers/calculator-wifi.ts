@@ -155,3 +155,10 @@ export function autoScaleSpeed(speed: number): ThroughputWithUnit {
 
   return { value: speed, unit: unit };
 }
+
+// return null for out of spec HT MCS indexes
+export function baseMcsToHtMcs(baseMcs: number, mimo: number) {
+  if (baseMcs > 7 || baseMcs < 0) return null;
+
+  return baseMcs + (mimo - 1) * 8;
+}

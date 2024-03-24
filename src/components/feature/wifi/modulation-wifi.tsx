@@ -8,6 +8,7 @@ import {
 import SelectInput from '../../input/select-input';
 import type { Modulation, WiFiStandard } from '~/@types/layer-wifi';
 import { mcstables } from '~/helpers/db/wifi-mcs-tables';
+import { baseMcsToHtMcs } from '~/helpers/calculator-wifi';
 
 interface Props {
   selectedValue: Signal<Modulation>;
@@ -81,6 +82,13 @@ export default component$((props: Props) => {
           it.label += ' - Out of Spec';
         }
       });
+    } else if (standard == 'ht') {
+      // convert base mcs to ht mcs
+      map.forEach((it) => {
+        const base = parseInt(it.value);
+        const mcs = baseMcsToHtMcs(base, mimo);
+        if (mcs !== null) it.label = mcs.toString();
+      });
     }
 
     return map;
@@ -119,7 +127,7 @@ export default component$((props: Props) => {
   return (
     <>
       <SelectInput
-        label={standard == 'ht' ? 'Basic MCS Index' : 'MCS Index'}
+        label={'MCS Index'}
         labelClass="text-center"
         options={mcsIndexes.value}
         selectedValue={selectedMcsIndex}
