@@ -135,7 +135,7 @@ export function autoScaleSpeed(speed: number): ThroughputWithUnit {
     unit = undefined;
   } else if (speed < 1_000_000) {
     unit = 'kbps';
-  } else if (speed < 1_000_000_000) {
+  } else if (speed < 10_000_000_000) {
     unit = 'Mbps';
   } else {
     unit = 'Gbps';
