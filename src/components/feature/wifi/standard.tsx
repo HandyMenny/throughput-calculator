@@ -21,7 +21,7 @@ export default component$(({ selectedValue }: Props) => {
 
   return (
     <SelectInput
-      label={'WiFi Type'}
+      label={'WiFi Standard'}
       labelClass="text-center"
       options={options}
       selectedValue={selectedValue}
