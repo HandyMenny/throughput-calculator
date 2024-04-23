@@ -1,0 +1,1 @@
+import{r as t,k as o,_ as e}from"./q-DjP29I6Z.js";const r=t(o(()=>e(()=>import("./q-BDslW33O.js"),[]),"s_ntJb0jBRnUc")),a={title:"WiFi Throughput",meta:[{name:"description",content:"WiFi 4/5/6/7 Throughput Calculator"}]};export{r as default,a as head};
