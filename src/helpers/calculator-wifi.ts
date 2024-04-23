@@ -34,7 +34,7 @@ function wifiCalculator(
 ) {
   const ratePerSymbol = modOrder * codeRate;
   const symbols = subCarriers / (ofdmSymbolDuration + guardInterval);
-  const overheadScaling = 1 - overhead;
+  const overheadScaling = Math.min(1, 1 - overhead);
 
   return mimoLayers * symbols * ratePerSymbol * overheadScaling;
 }
