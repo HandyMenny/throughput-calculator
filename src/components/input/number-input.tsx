@@ -16,6 +16,7 @@ interface Props {
   max?: number;
   selectedValue?: Signal<number>;
   labelClass?: string;
+  step?: number;
 }
 
 export default component$((props: Props) => {
@@ -28,6 +29,7 @@ export default component$((props: Props) => {
     hidden,
     min,
     max,
+    step,
   } = props;
   const randId = useId();
   const id = `number-input-${randId}`;
@@ -66,6 +68,7 @@ export default component$((props: Props) => {
         disabled={disabled}
         min={min}
         max={max}
+        step={step}
         onInput$={(_, currentTarget) => {
           if (selectedValue == undefined) return;
           const str = currentTarget.value;

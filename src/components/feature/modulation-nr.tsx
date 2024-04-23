@@ -176,6 +176,7 @@ export default component$((props: Props) => {
         hidden={hidden || selectedMod.value !== '-2'}
         min={0}
         max={1}
+        step={0.001}
       />
     </>
   );
