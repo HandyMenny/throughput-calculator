@@ -15620,7 +15620,7 @@
   "platform": {
     "qwik": "1.5.2",
     "vite": "",
-    "rollup": "4.13.0",
+    "rollup": "4.16.4",
     "env": "node",
     "os": "linux",
     "node": "20.12.2"
