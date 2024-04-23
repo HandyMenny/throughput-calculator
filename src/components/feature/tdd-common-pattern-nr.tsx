@@ -66,24 +66,30 @@ export default component$((props: Props) => {
         labelClass="text-center"
         selectedValue={dlSlots}
         hidden={hidden}
+        min={0}
       />
       <NumberInput
         label={`Slots UL ${suffix}`}
         labelClass="text-center"
         selectedValue={ulSlots}
         hidden={hidden}
+        min={0}
       />
       <NumberInput
         label={`Symbols DL ${suffix}`}
         labelClass="text-center"
         selectedValue={dlSymbols}
         hidden={hidden}
+        min={0}
+        max={14}
       />
       <NumberInput
         label={`Symbols UL ${suffix}`}
         labelClass="text-center"
         selectedValue={ulSymbols}
         hidden={hidden}
+        min={0}
+        max={14}
       />
     </>
   );

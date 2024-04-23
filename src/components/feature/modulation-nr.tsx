@@ -174,6 +174,8 @@ export default component$((props: Props) => {
         labelClass="text-center"
         selectedValue={selectedCodeRate}
         hidden={hidden || selectedMod.value !== '-2'}
+        min={0}
+        max={1}
       />
     </>
   );

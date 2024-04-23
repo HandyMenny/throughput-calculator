@@ -74,12 +74,14 @@ export default component$((props: Props) => {
         labelClass="text-center"
         selectedValue={manualRbDl}
         hidden={hidden || selectedBw.value !== 'manual' || hideDl}
+        min={0}
       />
       <NumberInput
         label={`${prefixUl} RBs`}
         labelClass="text-center"
         selectedValue={manualRbUl}
         hidden={hidden || selectedBw.value !== 'manual' || hideUl}
+        min={0}
       />
     </>
   );

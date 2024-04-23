@@ -102,12 +102,16 @@ export default component$((props: Props) => {
         labelClass="text-center"
         selectedValue={dlPercentage}
         hidden={hidden || selectedTDDRatioMode.value != 'percent'}
+        min={0}
+        max={100}
       />
       <NumberInput
         label={'Subframes UL %'}
         labelClass="text-center"
         selectedValue={ulPercentage}
         hidden={hidden || selectedTDDRatioMode.value != 'percent'}
+        min={0}
+        max={100}
       />
     </>
   );
