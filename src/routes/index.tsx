@@ -1,21 +1,21 @@
 import { component$ } from '@builder.io/qwik';
 import type { DocumentHead } from '@builder.io/qwik-city';
-import FormLteNrDc from '~/components/form/form-lte-nr-dc';
+import Home from '~/components/home/home';
 
 export default component$(() => {
   return (
     <>
-      <FormLteNrDc />
+      <Home />
     </>
   );
 });
 
 export const head: DocumentHead = {
-  title: 'Tput calculator',
+  title: 'Throughput calculator',
   meta: [
     {
       name: 'description',
-      content: 'Tput calculator',
+      content: 'Throughput calculator',
     },
   ],
 };
