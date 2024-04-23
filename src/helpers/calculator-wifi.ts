@@ -64,6 +64,8 @@ export function getSubCarriers(
     484: 468,
     996: 980,
     1992: 1960,
+    2988: 2940,
+    3984: 3920,
   };
 
   if (standard == 'ht' || standard == 'vht') {
@@ -88,6 +90,8 @@ export function mhzToTones(mhz: string): number | null {
     '40': 484,
     '80': 996,
     '160': 1992,
+    '240': 2988,
+    '320': 3984,
   };
 
   if (Object.keys(mapping).includes(mhz)) {
@@ -106,6 +110,8 @@ export function tonesToMHz(tones: number): number | null {
     '484': 40,
     '996': 80,
     '1992': 160,
+    '2988': 240,
+    '3984': 320,
   };
 
   if (Object.keys(mapping).includes(tones.toString())) {
@@ -124,7 +130,7 @@ export function getBwsSupported(standard: WiFiStandard): number[] {
     case 'he':
       return [26, 52, 106, 242, 484, 996, 1992];
     case 'eht':
-      return [26, 52, 106, 242, 484, 996, 1992];
+      return [26, 52, 106, 242, 484, 996, 1992, 2988, 3984];
   }
 }
 
