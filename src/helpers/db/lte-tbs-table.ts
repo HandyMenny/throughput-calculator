@@ -257,21 +257,31 @@ export namespace lteTbsTable {
   export function getTbs(tbsIndex: TbsIndex, rb: number) {
     const tbsIndexArr = tbsTable[tbsIndex];
 
+    if (rb < 1) {
+      return 0;
+    }
+
     if (rbIndexes.includes(rb)) {
       return tbsIndexArr[rbIndexes.indexOf(rb)];
-    } else {
-      const lower = findClosestRbIndex(rb, true);
-      const upper = findClosestRbIndex(rb, false);
-      console.log('rb ' + rb + ' lower = ' + lower + ' upper = ' + upper);
-      return Math.floor(
-        linearInterpolation(
-          rb,
-          rbIndexes[lower],
-          tbsIndexArr[lower],
-          rbIndexes[upper],
-          tbsIndexArr[upper],
-        ),
-      );
     }
+
+    const lower = findClosestRbIndex(rb, true);
+    const upper = findClosestRbIndex(rb, false);
+    console.log('rb ' + rb + ' lower = ' + lower + ' upper = ' + upper);
+
+    if (lower == upper) {
+      // no interpolation possible
+      return (tbsIndexArr[lower] * rb) / rbIndexes[lower];
+    }
+
+    return Math.floor(
+      linearInterpolation(
+        rb,
+        rbIndexes[lower],
+        tbsIndexArr[lower],
+        rbIndexes[upper],
+        tbsIndexArr[upper],
+      ),
+    );
   }
 }
