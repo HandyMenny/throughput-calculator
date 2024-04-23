@@ -1,4 +1,5 @@
 import {
+  type PropFunction,
   component$,
   useComputed$,
   useSignal,
@@ -18,12 +19,19 @@ import BandwidthLte from './bandwidth-lte';
 import ModulationLte from './modulation-lte';
 import AggregateLte from './aggregate-lte';
 import TddRatioLte from './tdd-ratio-lte';
+import ButtonIcon from '../input/button-icon';
+import {
+  TrashIcon,
+  ChevronDownIcon,
+  ChevronRightIcon,
+} from 'qwik-feather-icons';
 
 interface Props {
   speed: Throughput;
+  onDelete$: PropFunction<() => void>;
 }
 
-export default component$(({ speed }: Props) => {
+export default component$(({ speed, onDelete$ }: Props) => {
   const selectedDuplex = useSignal<DuplexType>('FDD');
   const selectedModDl = useSignal<string>('26');
   const selectedModUl = useSignal<string>('26');
@@ -32,6 +40,7 @@ export default component$(({ speed }: Props) => {
   const selectedRbUl = useSignal<number>(100);
   const selectedAggregate = useSignal<string>('dl-ul');
   const selectedTddRatio = useSignal<TDDRatioPercent>({ dl: 0, ul: 0 });
+  const collapsed = useSignal<boolean>(false);
 
   const mimoDlOptions = [
     { label: '1', value: '1' },
@@ -97,17 +106,53 @@ export default component$(({ speed }: Props) => {
 
   const showUl = useComputed$(() => selectedDuplex.value !== 'SDL');
   const showTDD = useComputed$(() => selectedDuplex.value === 'TDD');
+
   return (
     <div class="m-4 border-2 border-solid border-gray-500 p-4">
+      <div class="flex flex-wrap items-center justify-between">
+        <div class="flex">
+          <ButtonIcon
+            label="collapse"
+            type="button"
+            onClick$={async () => {
+              collapsed.value = !collapsed.value;
+            }}
+            Icon={collapsed.value ? ChevronRightIcon : ChevronDownIcon}
+          />
+        </div>
+        <Throughtput
+          class="hidden flex-1 text-center text-xl font-semibold leading-8 sm:block"
+          dl={speed.dl}
+          ul={speed.ul}
+          dlUlSeparator="/"
+          iconSize={20}
+          iconStroke={2}
+        />
+        <div class="flex">
+          <ButtonIcon
+            label="remove"
+            type="button"
+            onClick$={async () => {
+              onDelete$();
+            }}
+            Icon={TrashIcon}
+          />
+        </div>
+      </div>
       <Throughtput
-        class="text-center text-xl font-semibold leading-8"
+        class="text-center text-xl font-semibold leading-8 sm:hidden"
         dl={speed.dl}
         ul={speed.ul}
         dlUlSeparator="/"
         iconSize={20}
         iconStroke={2}
       />
-      <div class="grid grid-cols-1 items-end gap-x-5 gap-y-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+      <div
+        class={
+          'grid grid-cols-1 items-end gap-x-5 gap-y-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6' +
+          (collapsed.value ? ' hidden' : '')
+        }
+      >
         <DuplexLte selectedValue={selectedDuplex} />
         <BandwidthLte
           prefixDl={'Downlink'}

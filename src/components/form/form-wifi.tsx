@@ -12,6 +12,7 @@ import LayerWifi from '../feature/wifi/layer-wifi';
 export default component$(() => {
   const count = useSignal(1);
   const speeds: Throughput[] = useStore([{ dl: 0, ul: 0 }]);
+  const deleted = useStore<number[]>([]);
 
   const totalSpeed = useComputed$(() => {
     console.log('calculate speed');
@@ -33,23 +34,20 @@ export default component$(() => {
         iconSize={22}
         iconStroke={2.4}
       />
-      {[...Array(count.value).keys()].map((value) => (
-        <div key={`nr-${value}`}>
-          <LayerWifi speed={speeds[value]} />
-        </div>
-      ))}
+      {[...Array(count.value).keys()]
+        .filter((it) => !deleted.includes(it))
+        .map((value) => (
+          <div key={`nr-${value}`}>
+            <LayerWifi
+              speed={speeds[value]}
+              onDelete$={async () => {
+                deleted.push(value);
+                speeds[value] = { dl: 0, ul: 0 };
+              }}
+            />
+          </div>
+        ))}
       <div class="flex flex-wrap gap-x-4 px-4">
-        <Button
-          type="button"
-          label="Remove"
-          hidden={count.value < 2}
-          onClick$={async () => {
-            if (count.value > 1) {
-              count.value--;
-              speeds.pop();
-            }
-          }}
-        />
         <Button
           type="button"
           label="Add"

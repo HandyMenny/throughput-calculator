@@ -18,6 +18,7 @@ export default component$(() => {
   const speeds: Throughput[] = useStore([]);
   const ulTxSwitchPairs: UlTxSwitchPair[] = useStore([]);
   const txReductions: number[] = useStore([]);
+  const deleted = useStore<number[]>([]);
 
   const totalSpeed = useComputed$(() => {
     return speeds.reduce(
@@ -81,37 +82,51 @@ export default component$(() => {
         iconSize={22}
         iconStroke={2.4}
       />
-      {[...Array(count.value).keys()].map(
-        (value) =>
-          (type[value] == 'lte' && (
-            <div key={`lte-${value}`}>
-              <LayerLte speed={speeds[value]} />
-            </div>
-          )) || (
-            <div key={`nr-${value}`}>
-              <LayerNr
-                speed={speeds[value]}
-                ulTxSwitchPair={ulTxSwitchPairs[value]}
-                txReduction={txReductions[value]}
-              />
-            </div>
-          ),
-      )}
+      {[...Array(count.value).keys()]
+        .filter((it) => !deleted.includes(it))
+        .map(
+          (value) =>
+            (type[value] == 'lte' && (
+              <div key={`lte-${value}`}>
+                <LayerLte
+                  speed={speeds[value]}
+                  onDelete$={async () => {
+                    deleted.push(value);
+                    speeds[value] = { dl: 0, ul: 0 };
+                    ulTxSwitchPairs[value] = {
+                      id: count.value - 1,
+                      on: false,
+                      mimo: 1,
+                      airtime: 1,
+                      throughput: 1,
+                    };
+                    txReductions[value] = 0;
+                  }}
+                />
+              </div>
+            )) || (
+              <div key={`nr-${value}`}>
+                <LayerNr
+                  speed={speeds[value]}
+                  ulTxSwitchPair={ulTxSwitchPairs[value]}
+                  txReduction={txReductions[value]}
+                  onDelete$={async () => {
+                    deleted.push(value);
+                    speeds[value] = { dl: 0, ul: 0 };
+                    ulTxSwitchPairs[value] = {
+                      id: count.value - 1,
+                      on: false,
+                      mimo: 1,
+                      airtime: 1,
+                      throughput: 1,
+                    };
+                    txReductions[value] = 0;
+                  }}
+                />
+              </div>
+            ),
+        )}
       <div class="flex flex-wrap gap-x-4 px-4">
-        <Button
-          type="button"
-          label="Remove"
-          hidden={count.value < 1}
-          onClick$={async () => {
-            if (count.value > 0) {
-              count.value--;
-              speeds.pop();
-              ulTxSwitchPairs.pop();
-              txReductions.pop();
-              type.pop();
-            }
-          }}
-        />
         <Button
           type="button"
           label="Add LTE"
