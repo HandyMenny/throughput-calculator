@@ -11,11 +11,11 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: 'Tput calculator',
+  title: 'WiFi Throughput',
   meta: [
     {
       name: 'description',
-      content: 'Tput calculator',
+      content: 'WiFi 4/5/6/7 Throughput Calculator',
     },
   ],
 };

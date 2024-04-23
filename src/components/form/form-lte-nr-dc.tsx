@@ -11,6 +11,7 @@ import { calculateUlTxSwitchReduction } from '~/helpers/calculator';
 import Throughtput from '../feature/throughtput';
 import LayerLte from '../feature/layer-lte';
 import LayerNr from '../feature/layer-nr';
+import Title from '../header/title';
 
 export default component$(() => {
   const count = useSignal(0);
@@ -73,95 +74,98 @@ export default component$(() => {
   });
 
   return (
-    <div class="p-2">
-      <Throughtput
-        class="text-center text-2xl font-bold leading-9"
-        dl={totalSpeed.value.dl}
-        ul={totalSpeed.value.ul}
-        dlUlSeparator="/"
-        iconSize={22}
-        iconStroke={2.4}
-      />
-      {[...Array(count.value).keys()]
-        .filter((it) => !deleted.includes(it))
-        .map(
-          (value) =>
-            (type[value] == 'lte' && (
-              <div key={`lte-${value}`}>
-                <LayerLte
-                  speed={speeds[value]}
-                  onDelete$={async () => {
-                    deleted.push(value);
-                    speeds[value] = { dl: 0, ul: 0 };
-                    ulTxSwitchPairs[value] = {
-                      id: count.value - 1,
-                      on: false,
-                      mimo: 1,
-                      airtime: 1,
-                      throughput: 1,
-                    };
-                    txReductions[value] = 0;
-                  }}
-                />
-              </div>
-            )) || (
-              <div key={`nr-${value}`}>
-                <LayerNr
-                  speed={speeds[value]}
-                  ulTxSwitchPair={ulTxSwitchPairs[value]}
-                  txReduction={txReductions[value]}
-                  onDelete$={async () => {
-                    deleted.push(value);
-                    speeds[value] = { dl: 0, ul: 0 };
-                    ulTxSwitchPairs[value] = {
-                      id: count.value - 1,
-                      on: false,
-                      mimo: 1,
-                      airtime: 1,
-                      throughput: 1,
-                    };
-                    txReductions[value] = 0;
-                  }}
-                />
-              </div>
-            ),
-        )}
-      <div class="flex flex-wrap gap-x-4 px-4">
-        <Button
-          type="button"
-          label="Add LTE"
-          onClick$={async () => {
-            count.value++;
-            speeds.push({ dl: 0, ul: 0 });
-            ulTxSwitchPairs.push({
-              id: count.value - 1,
-              on: false,
-              mimo: 1,
-              airtime: 1,
-              throughput: 1,
-            });
-            txReductions.push(0);
-            type.push('lte');
-          }}
+    <>
+      <Title text="LTE-NR DC Throughput" addClasses="text-3xl" />
+      <div class="p-2">
+        <Throughtput
+          class="text-center text-2xl font-bold leading-9"
+          dl={totalSpeed.value.dl}
+          ul={totalSpeed.value.ul}
+          dlUlSeparator="/"
+          iconSize={22}
+          iconStroke={2.4}
         />
-        <Button
-          type="button"
-          label="Add NR"
-          onClick$={async () => {
-            count.value++;
-            speeds.push({ dl: 0, ul: 0 });
-            ulTxSwitchPairs.push({
-              id: count.value - 1,
-              on: false,
-              mimo: 1,
-              airtime: 1,
-              throughput: 1,
-            });
-            txReductions.push(0);
-            type.push('nr');
-          }}
-        />
+        {[...Array(count.value).keys()]
+          .filter((it) => !deleted.includes(it))
+          .map(
+            (value) =>
+              (type[value] == 'lte' && (
+                <div key={`lte-${value}`}>
+                  <LayerLte
+                    speed={speeds[value]}
+                    onDelete$={async () => {
+                      deleted.push(value);
+                      speeds[value] = { dl: 0, ul: 0 };
+                      ulTxSwitchPairs[value] = {
+                        id: count.value - 1,
+                        on: false,
+                        mimo: 1,
+                        airtime: 1,
+                        throughput: 1,
+                      };
+                      txReductions[value] = 0;
+                    }}
+                  />
+                </div>
+              )) || (
+                <div key={`nr-${value}`}>
+                  <LayerNr
+                    speed={speeds[value]}
+                    ulTxSwitchPair={ulTxSwitchPairs[value]}
+                    txReduction={txReductions[value]}
+                    onDelete$={async () => {
+                      deleted.push(value);
+                      speeds[value] = { dl: 0, ul: 0 };
+                      ulTxSwitchPairs[value] = {
+                        id: count.value - 1,
+                        on: false,
+                        mimo: 1,
+                        airtime: 1,
+                        throughput: 1,
+                      };
+                      txReductions[value] = 0;
+                    }}
+                  />
+                </div>
+              ),
+          )}
+        <div class="flex flex-wrap gap-x-4 px-4">
+          <Button
+            type="button"
+            label="Add LTE"
+            onClick$={async () => {
+              count.value++;
+              speeds.push({ dl: 0, ul: 0 });
+              ulTxSwitchPairs.push({
+                id: count.value - 1,
+                on: false,
+                mimo: 1,
+                airtime: 1,
+                throughput: 1,
+              });
+              txReductions.push(0);
+              type.push('lte');
+            }}
+          />
+          <Button
+            type="button"
+            label="Add NR"
+            onClick$={async () => {
+              count.value++;
+              speeds.push({ dl: 0, ul: 0 });
+              ulTxSwitchPairs.push({
+                id: count.value - 1,
+                on: false,
+                mimo: 1,
+                airtime: 1,
+                throughput: 1,
+              });
+              txReductions.push(0);
+              type.push('nr');
+            }}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 });

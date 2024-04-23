@@ -12,7 +12,7 @@ export default component$(() => {
         <Link
           class="text-xl text-white hover:underline active:underline"
           href={basePath}
-          title="Throughput Calculator"
+          title="Home page"
         >
           Throughput Calculator
         </Link>

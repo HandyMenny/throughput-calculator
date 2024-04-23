@@ -8,6 +8,7 @@ import Button from '../input/button';
 import type { Throughput } from '~/@types/layer-lte';
 import Throughtput from '../feature/wifi/throughtput';
 import LayerWifi from '../feature/wifi/layer-wifi';
+import Title from '../header/title';
 
 export default component$(() => {
   const count = useSignal(1);
@@ -25,38 +26,41 @@ export default component$(() => {
   });
 
   return (
-    <div class="p-2">
-      <Throughtput
-        class="text-center text-2xl font-bold leading-9"
-        dl={totalSpeed.value.dl}
-        ul={totalSpeed.value.ul}
-        dlUlSeparator="/"
-        iconSize={22}
-        iconStroke={2.4}
-      />
-      {[...Array(count.value).keys()]
-        .filter((it) => !deleted.includes(it))
-        .map((value) => (
-          <div key={`nr-${value}`}>
-            <LayerWifi
-              speed={speeds[value]}
-              onDelete$={async () => {
-                deleted.push(value);
-                speeds[value] = { dl: 0, ul: 0 };
-              }}
-            />
-          </div>
-        ))}
-      <div class="flex flex-wrap gap-x-4 px-4">
-        <Button
-          type="button"
-          label="Add"
-          onClick$={async () => {
-            count.value++;
-            speeds.push({ dl: 0, ul: 0 });
-          }}
+    <>
+      <Title text="WiFi Throughput" addClasses="text-3xl" />
+      <div class="p-2">
+        <Throughtput
+          class="text-center text-2xl font-bold leading-9"
+          dl={totalSpeed.value.dl}
+          ul={totalSpeed.value.ul}
+          dlUlSeparator="/"
+          iconSize={22}
+          iconStroke={2.4}
         />
+        {[...Array(count.value).keys()]
+          .filter((it) => !deleted.includes(it))
+          .map((value) => (
+            <div key={`nr-${value}`}>
+              <LayerWifi
+                speed={speeds[value]}
+                onDelete$={async () => {
+                  deleted.push(value);
+                  speeds[value] = { dl: 0, ul: 0 };
+                }}
+              />
+            </div>
+          ))}
+        <div class="flex flex-wrap gap-x-4 px-4">
+          <Button
+            type="button"
+            label="Add"
+            onClick$={async () => {
+              count.value++;
+              speeds.push({ dl: 0, ul: 0 });
+            }}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 });
